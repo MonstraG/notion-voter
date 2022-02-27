@@ -1,19 +1,28 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es6",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
+    "allowJs": false,
     "skipLibCheck": true,
     "strict": true,
+    // "exactOptionalPropertyTypes": true,  assigning x?: number to same in another type doesn't work
     "forceConsistentCasingInFileNames": true,
+    "noImplicitOverride": true,
+    // "noImplicitReturns": true,  useEffect doesn't always return value
+    // "noPropertyAccessFromIndexSignature": true,  forbids process.env.whatever
+    // "noUncheckedIndexedAccess": true,   req will be possibly undefined in handlers
+    "strictPropertyInitialization": false,   // otherwise, sequelize models shout
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "isolatedModules": true,
+    "isolatedModules": true, // required to be true for SWC / babel
     "jsx": "preserve",
-    "incremental": true
+    "incremental": true,
+    "baseUrl": ".",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
