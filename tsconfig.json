@@ -5,13 +5,9 @@
     "allowJs": false,
     "skipLibCheck": true,
     "strict": true,
-    // "exactOptionalPropertyTypes": true,  assigning x?: number to same in another type doesn't work
     "forceConsistentCasingInFileNames": true,
-    "noImplicitOverride": true,
-    // "noImplicitReturns": true,  useEffect doesn't always return value
-    // "noPropertyAccessFromIndexSignature": true,  forbids process.env.whatever
-    // "noUncheckedIndexedAccess": true,   req will be possibly undefined in handlers
-    "strictPropertyInitialization": false,   // otherwise, sequelize models shout
+    "strictFunctionTypes": false,
+    "strictNullChecks": false,
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
@@ -21,8 +17,7 @@
     "jsx": "preserve",
     "incremental": true,
     "baseUrl": ".",
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]

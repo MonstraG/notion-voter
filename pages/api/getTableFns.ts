@@ -1,6 +1,5 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import notion from "api/notion";
-import { Row } from "types/Row";
+import { NotionRow } from "types/Row";
+import notion from "pages/api/notion";
 
 type DatabaseRow = UnArray<Awaited<TableRowsQueryResult>>;
 
@@ -31,7 +30,7 @@ const getTitle = (row: DatabaseRow, property: string): string => {
 	return prop.type === "title" ? prop.title[0].plain_text : "";
 };
 
-const parseRows = (rows: Awaited<TableRowsQueryResult>): Row[] =>
+const parseRows = (rows: Awaited<TableRowsQueryResult>): NotionRow[] =>
 	rows
 		.filter((row) => !getCheckboxValue(row, "N/A")) // only available
 		.map((row) => ({
@@ -42,10 +41,6 @@ const parseRows = (rows: Awaited<TableRowsQueryResult>): Row[] =>
 		}));
 
 type UnArray<T> = T extends (infer U)[] ? U : T;
-//
-// type QueryDatabaseResults = UnArray<QueryDatabaseResponse["results"]>;
-//
-// type DatabaseProperties = QueryDatabaseResults["properties"];
 
 type TableRowsQueryResult = ReturnType<typeof queryForTableRows>;
 
@@ -64,13 +59,7 @@ const queryForTableRows = async (databaseId: string) => {
 		.filter((p) => p != null);
 };
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<Row[] | string>) {
-	if (typeof process.env.DATABASE_ID !== "string") {
-		res.status(500).send("DATABASE_ID not set");
-		return;
-	}
+const getNotionTable = (databaseId: string): Promise<NotionRow[]> =>
+	queryForTableRows(databaseId).then(parseRows);
 
-	const tableRows = await queryForTableRows(process.env.DATABASE_ID);
-
-	res.status(200).json(parseRows(tableRows));
-}
+export default getNotionTable;

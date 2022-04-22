@@ -1,44 +1,37 @@
-import type { NextPage } from "next";
-import { useState } from "react";
-import { Row } from "types/Row";
+import type { GetStaticProps, NextPage } from "next";
+import { useSession } from "next-auth/react";
+import type { ThisUser } from "types/User";
+import IndexPage from "components/IndexPage";
 
-const Home: NextPage = () => {
-	const [state, setState] = useState<Row[]>([]);
+type Props = {
+	vercel: boolean;
+	fallbackInfo: ThisUser | null;
+};
 
-	return (
-		<div>
-			<button
-				onClick={() =>
-					fetch("/api/hello")
-						.then((r) => r.json())
-						.then(setState)
-						.catch(console.error)
-				}
-			>
-				fetch stuff
-			</button>
-			<table>
-				<thead>
-					<tr>
-						<th>Name</th>
-						<th>Players</th>
-						<th>Played</th>
-						<th>Completed</th>
-					</tr>
-				</thead>
-				<tbody>
-					{state.map((row) => (
-						<tr key={row.name}>
-							<td>{row.name}</td>
-							<td>{row.players}</td>
-							<td>{row.played ? "yep" : "no"}</td>
-							<td>{row.completed ? "yep" : "no"}</td>
-						</tr>
-					))}
-				</tbody>
-			</table>
-		</div>
-	);
+const Home: NextPage<Props> = ({ vercel, fallbackInfo }) => {
+	const { status, data } = useSession({
+		required: vercel
+	});
+
+	if (!vercel && fallbackInfo) {
+		return <IndexPage voter={fallbackInfo} />;
+	}
+
+	if (status !== "authenticated") {
+		return null;
+	}
+
+	return <IndexPage voter={data?.user as ThisUser} />;
+};
+
+export const getStaticProps: GetStaticProps = () => {
+	const vercel = Boolean(process.env.VERCEL);
+	return {
+		props: {
+			vercel,
+			fallbackInfo: !vercel ? JSON.parse(process.env.FALLBACK_USER_INFO!) : null
+		}
+	};
 };
 
 export default Home;
