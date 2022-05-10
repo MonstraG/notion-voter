@@ -49,6 +49,16 @@ const GamesTable: FC<Props> = ({ voter, tableData }) => {
 	const [myVotes, setMyVotes] = useState<Record<string, boolean>>({});
 	const [ready, setReady] = useState<boolean>(false);
 
+	useEffect(() => {
+		const myVoteEntries = Object.entries(voteData.votes)
+			.filter(([game, votes]) => votes[voter.name] != null)
+			.map(([game, votes]) => {
+				return [game, votes[voter.name]];
+			});
+
+		setMyVotes(Object.fromEntries(myVoteEntries));
+	}, [voter, voteData]);
+
 	const onCheck = (name: string) => (e: ChangeEvent<HTMLInputElement>) => {
 		const checked = e.target.checked;
 		setMyVotes((prev) => ({ ...prev, [name]: checked }));

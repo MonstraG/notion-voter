@@ -1,6 +1,5 @@
 import { FC } from "react";
 import useTableData from "helpers/hooks/useTableData";
-import ReadyTimer from "components/ReadyTimer";
 import GamesTable from "components/table/GamesTable";
 import { ThisUser } from "types/User";
 import Loader from "components/Loader";
@@ -25,7 +24,6 @@ const IndexPage: FC<Props> = ({ voter }) => {
 	return (
 		<TableWrapper>
 			<GamesTable voter={voter} tableData={data} />
-			<ReadyTimer />
 		</TableWrapper>
 	);
 };
