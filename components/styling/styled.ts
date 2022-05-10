@@ -1,5 +1,4 @@
-import emotionStyled from "@emotion/styled";
-import { CreateStyled } from "@emotion/styled";
+import emotionStyled, { CreateStyled } from "@emotion/styled";
 
 type params = Parameters<CreateStyled>;
 

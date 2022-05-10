@@ -1,11 +1,11 @@
 import { ChangeEvent, FC, useEffect, useState } from "react";
-import { ThisUser } from "types/User";
-import { Vote } from "types/Vote";
+import type { ThisUser } from "types/User";
+import type { Vote } from "types/Vote";
 import NameColumnHeader from "components/table/NameColumnHeader";
 import BigCheckbox from "components/BigCheckbox";
 import ReadyFooter from "components/table/ReadyFooter";
 import post from "helpers/post";
-import { NotionResultRow, NotionRow } from "types/Row";
+import type { NotionResultRow, NotionRow } from "types/Row";
 import useVotesData from "helpers/hooks/useVotesData";
 import styled from "components/styling/styled";
 
@@ -61,15 +61,21 @@ const GamesTable: FC<Props> = ({ voter, tableData }) => {
 	const [sortedRows, setSortedRows] = useState<NotionResultRow[]>(tableData);
 	useEffect(() => {
 		if (voteData.done) {
-			///todo:  voteData.votes[r.name] can be undefined !!!
 			const withCounts = tableData.map((r) => ({
 				...r,
-				votes: sum(Object.values(voteData.votes[r.name]).map((k) => (k ? 1 : 0)))
+				votes: sum(Object.values(voteData.votes[r.name] || {}).map((k) => (k ? 1 : 0)))
 			}));
 			setSortedRows(withCounts.sort((a, b) => b.votes - a.votes));
 		} else {
-			// todo: smarter sort
-			setSortedRows([...tableData].sort((a, b) => a.players.localeCompare(b.players)));
+			const copy = [...tableData];
+			copy.sort((a, b) => {
+				const completedComparison = Number(a.completed) - Number(b.completed);
+				if (completedComparison != 0) return completedComparison;
+				const playedComparison = Number(a.played) - Number(b.played);
+				if (playedComparison != 0) return playedComparison;
+				return a.players.localeCompare(b.players);
+			});
+			setSortedRows(copy);
 		}
 	}, [tableData, voteData.done, voteData.votes]);
 
@@ -88,6 +94,7 @@ const GamesTable: FC<Props> = ({ voter, tableData }) => {
 					{voteData.done && <th>Total votes</th>}
 				</tr>
 			</thead>
+
 			<tbody>
 				{sortedRows.map((row) => (
 					<tr key={row.name}>
@@ -103,7 +110,7 @@ const GamesTable: FC<Props> = ({ voter, tableData }) => {
 							<BigCheckbox
 								checked={Boolean(myVotes[row.name])}
 								onChange={onCheck(row.name)}
-								disabled={ready}
+								disabled={ready || voteData.done}
 							/>
 						</td>
 						{others.map((u) => (
@@ -115,7 +122,8 @@ const GamesTable: FC<Props> = ({ voter, tableData }) => {
 					</tr>
 				))}
 			</tbody>
-			{tableData && (
+
+			{tableData && !voteData.done && (
 				<ReadyFooter voteData={voteData} others={others} ready={ready} setReady={setReady} />
 			)}
 		</StyledTable>

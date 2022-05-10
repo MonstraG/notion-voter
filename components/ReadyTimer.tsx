@@ -1,12 +1,14 @@
 import { FC, useEffect, useState } from "react";
 import styled from "components/styling/styled";
 import useVotesData from "helpers/hooks/useVotesData";
+import { css } from "@emotion/react";
 
-const FloatingTimer = styled("div")`
-	position: fixed;
-	top: 48px;
-	right: 0;
-	width: 64px;
+const FloatingTimer = styled("div")<{ $hidden: boolean }>`
+	position: sticky;
+	top: 16px;
+	margin-left: 16px;
+	right: -80px;
+	width: 80px;
 	text-align: center;
 
 	h1 {
@@ -14,42 +16,64 @@ const FloatingTimer = styled("div")`
 	}
 
 	padding: 13px 16px 16px;
-	border: 1px solid ${({ theme }) => theme.text};
+	border: 2px solid ${({ theme }) => theme.text};
 	border-radius: ${({ theme }) => theme.borderRadius};
-	border-top-right-radius: 0;
-	border-bottom-right-radius: 0;
-	border-right: 0;
 	background-color: ${({ theme }) => theme.elevation["2"]};
+
+	transition: opacity 0.2s;
+	${({ $hidden }) =>
+		$hidden &&
+		css`
+			opacity: 0;
+		`}
 `;
 
 const ReadyTimer: FC = () => {
 	const { data: voteData } = useVotesData();
-	const [state, setState] = useState<number | null>(voteData?.allReady);
+	const [state, setState] = useState<{
+		time: number | null;
+		running: boolean;
+	}>({
+		time: voteData.allReady,
+		running: false
+	});
 
 	useEffect(() => {
-		setState(voteData?.allReady);
+		if (voteData?.allReady == null) {
+			setState({
+				time: voteData.allReady,
+				running: false
+			});
+			return;
+		}
+		setState({
+			time: voteData.allReady,
+			running: true
+		});
 
 		const interval = setInterval(
 			() =>
 				setState((prev) => {
-					if (prev == null || prev - 1 === 0) {
+					if (prev.time == null || prev.time - 1 === 0) {
 						clearInterval(interval);
-						return null;
+						return {
+							time: 0,
+							running: false
+						};
 					}
-					return prev - 1;
+					return {
+						time: prev.time - 1,
+						...prev
+					};
 				}),
 			1000
 		);
 		return () => clearInterval(interval);
 	}, [voteData.allReady]);
 
-	if (state == null) {
-		return null;
-	}
-
 	return (
-		<FloatingTimer>
-			<h1>{state}</h1>
+		<FloatingTimer $hidden={!state.running}>
+			<h1>{state.time || 0}</h1>
 		</FloatingTimer>
 	);
 };
