@@ -1,7 +1,8 @@
 import { FC } from "react";
 import styled from "components/styling/styled";
+import { css } from "@emotion/react";
 
-const LoaderWrapper = styled("div")`
+const LoaderWrapper = styled("div")<{ $button?: boolean }>`
 	width: 80px;
 	height: 80px;
 
@@ -30,10 +31,29 @@ const LoaderWrapper = styled("div")`
 			transform: rotate(360deg);
 		}
 	}
+
+	${({ $button }) =>
+		$button &&
+		css`
+			width: 14px;
+			height: 14px;
+
+			top: calc(50% - 7px);
+			left: calc(50% - 7px);
+			div {
+				width: 14px;
+				height: 14px;
+				border-width: 3px;
+			}
+		`}
 `;
 
-const Loader: FC = () => (
-	<LoaderWrapper>
+type Props = {
+	button?: boolean;
+};
+
+const Loader: FC<Props> = ({ button }) => (
+	<LoaderWrapper $button={button}>
 		<div />
 	</LoaderWrapper>
 );

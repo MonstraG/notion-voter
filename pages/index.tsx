@@ -14,7 +14,7 @@ const Home: NextPage<Props> = ({ vercel, fallbackInfo }) => {
 	});
 
 	if (!vercel && fallbackInfo) {
-		return <IndexPage voter={fallbackInfo} />;
+		return <IndexPage voter={fallbackInfo} isFallback />;
 	}
 
 	if (status !== "authenticated") {

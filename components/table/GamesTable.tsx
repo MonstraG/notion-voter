@@ -6,7 +6,7 @@ import BigCheckbox from "components/BigCheckbox";
 import ReadyFooter from "components/table/ReadyFooter";
 import post from "helpers/post";
 import type { NotionResultRow, NotionRow } from "types/Row";
-import useVotesData from "helpers/hooks/useVotesData";
+import useVotesData from "components/useVotesData";
 import styled from "components/styling/styled";
 
 const StyledTable = styled("table")`
@@ -51,7 +51,7 @@ const GamesTable: FC<Props> = ({ voter, tableData }) => {
 
 	useEffect(() => {
 		const myVoteEntries = Object.entries(voteData.votes)
-			.filter(([game, votes]) => votes[voter.name] != null)
+			.filter(([_, votes]) => votes[voter.name] != null)
 			.map(([game, votes]) => {
 				return [game, votes[voter.name]];
 			});

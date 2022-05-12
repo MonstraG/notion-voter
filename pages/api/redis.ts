@@ -4,15 +4,13 @@ const client = new Redis(process.env.REDIS_URL);
 
 const dataKey = "data";
 
-export const redisWrite = (data: object): Promise<unknown> => {
-	return client.set(dataKey, JSON.stringify(data));
-};
+export const redisWrite = (data: object): Promise<unknown> =>
+	client.set(dataKey, JSON.stringify(data));
 
-export const redisRead = (): Promise<unknown> => {
-	return client
+export const redisRead = (): Promise<unknown> =>
+	client
 		.get(dataKey)
 		.then((result) => JSON.parse(result))
-		.catch((e) => {
+		.catch(() => {
 			return null;
 		});
-};

@@ -40,6 +40,12 @@ export const finishVote = (): Promise<unknown> =>
 		return setVoteState(voteData);
 	});
 
+export const unfinishVote = (): Promise<unknown> =>
+	getVoteState().then((voteData) => {
+		voteData.done = false;
+		return setVoteState(voteData);
+	});
+
 const ensureVoterEntered = (voter: Voter, voteData: VoteData) => {
 	if (voteData.users.every((u) => u.name != voter.name)) {
 		voteData.users = [...voteData.users, { name: voter.name, image: voter.image }]; //destructured to ensure not spoiling email

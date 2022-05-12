@@ -5,7 +5,7 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const useVotesData = () =>
 	useSWR<VoteData>("/api/vote/get", fetcher, {
-		refreshInterval: 1000,
+		refreshInterval: 2000,
 		fallbackData: emptyVoteData,
 		revalidateOnMount: false
 	});

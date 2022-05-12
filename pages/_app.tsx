@@ -6,8 +6,8 @@ import { ThemeProvider } from "@emotion/react";
 import theme from "components/styling/theme";
 import type { EmotionCache } from "@emotion/cache";
 import { CacheProvider } from "@emotion/react";
-import styled from "@emotion/styled";
 import createEmotionCache from "components/styling/createEmotionTheme";
+import styled from "components/styling/styled";
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();

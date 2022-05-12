@@ -9,7 +9,10 @@ const theme = {
 	text: "#eee",
 	borderRadius: "4px",
 	transition: "180ms",
-	transitionInstant: "100ms"
+	transitionInstant: "100ms",
+	dark: "#5300e8",
+	primary: "#6002ee",
+	light: "#7e3ff2"
 };
 
 export default theme;

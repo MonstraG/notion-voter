@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { NotionRow } from "types/Row";
 import getNotionTable from "pages/api/getTableFns";
-import doIfLoggedIn from "pages/api/doIfLoggedIn";
+import doIfLoggedIn from "pages/api/authConditionals/doIfLoggedIn";
 
 export default async function handler(
 	req: NextApiRequest,
