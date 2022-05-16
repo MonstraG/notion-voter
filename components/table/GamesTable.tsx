@@ -36,7 +36,7 @@ const StyledTable = styled("table")`
 		text-align: left;
 	}
 
-	tr:nth-child(2n) {
+	tr:nth-of-type(2n) {
 		background-color: ${({ theme }) => theme.elevation[2]};
 	}
 `;
