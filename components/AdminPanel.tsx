@@ -50,8 +50,6 @@ const AdminPanel: FC<Props> = ({ isFallback }) => {
 		fetch(`api/vote/admin/${key}`).finally(() => setFetching(null));
 	};
 
-	console.log(voteData);
-
 	const loading = Boolean(fetching);
 	return (
 		<Buttons>
