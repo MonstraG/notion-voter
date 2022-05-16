@@ -11,4 +11,4 @@ https://vercel.com/cli
 
 
 
-// todo: highight ready columns
+// todo: bundle posts.

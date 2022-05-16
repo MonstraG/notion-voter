@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useEffect, useState } from "react";
+import { ChangeEvent, FC, useCallback, useEffect, useState } from "react";
 import type { ThisUser } from "types/User";
 import type { Vote, VoteData } from "types/Vote";
 import NameColumnHeader from "components/table/NameColumnHeader";
@@ -44,6 +44,8 @@ const StyledTable = styled("table")`
 const sum = (array: number[]): number => array.reduce((acc, next) => acc + next, 0);
 
 const findMyVotes = (voteData: VoteData, user: ThisUser): Record<string, boolean> => {
+	if (!voteData.votes) return {};
+
 	const myVoteEntries = Object.entries(voteData.votes)
 		.filter(([_, votes]) => votes[user.name] != null)
 		.map(([game, votes]) => [game, votes[user.name]]);
@@ -60,41 +62,42 @@ const GamesTable: FC<Props> = ({ user, tableData }) => {
 
 	const myVotes = findMyVotes(voteData, user);
 
-	const onCheck = (name: string) => (e: ChangeEvent<HTMLInputElement>) => {
-		const checked = e.target.checked;
-
-		const updateData = (data: VoteData) => {
-			if (!data.votes[name]) {
-				data.votes[name] = {};
-			}
-			data.votes[name][user.name] = checked;
-			return { ...data };
-		};
-
-		mutateVoteData(
-			() => {
-				const vote: Vote = { name, checked };
-				void post("/api/vote/post", vote);
-				return null;
-			},
-			{
-				revalidate: false,
-				populateCache: false,
-				optimisticData: updateData
-			}
-		);
-	};
+	const onCheck = useCallback(
+		(gameName: string) => (e: ChangeEvent<HTMLInputElement>) =>
+			mutateVoteData(
+				() => {
+					const vote: Vote = { name: gameName, checked: e.target.checked };
+					void post("/api/vote/post", vote);
+					return null;
+				},
+				{
+					revalidate: false,
+					populateCache: false,
+					optimisticData: (data: VoteData) => ({
+						...data,
+						votes: {
+							...data.votes,
+							[gameName]: {
+								...(data.votes[gameName] || {}),
+								[user.name]: e.target.checked
+							}
+						}
+					})
+				}
+			),
+		[mutateVoteData, user.name]
+	);
 
 	const others = voteData.users.filter((u) => u.name != user.name);
 
-	const [sortedRows, setSortedRows] = useState<NotionResultRow[]>(tableData);
+	const [sortedNotionGames, setSortedNotionGames] = useState<NotionResultRow[]>(tableData);
 	useEffect(() => {
 		if (voteData.done) {
 			const withCounts = tableData.map((r) => ({
 				...r,
 				votes: sum(Object.values(voteData.votes[r.name] || {}).map((k) => (k ? 1 : 0)))
 			}));
-			setSortedRows(withCounts.sort((a, b) => b.votes - a.votes));
+			setSortedNotionGames(withCounts.sort((a, b) => b.votes - a.votes));
 		} else {
 			const copy = [...tableData];
 			copy.sort((a, b) => {
@@ -104,7 +107,7 @@ const GamesTable: FC<Props> = ({ user, tableData }) => {
 				if (playedComparison != 0) return playedComparison;
 				return a.players.localeCompare(b.players);
 			});
-			setSortedRows(copy);
+			setSortedNotionGames(copy);
 		}
 	}, [tableData, voteData.done, voteData.votes]);
 
@@ -127,29 +130,29 @@ const GamesTable: FC<Props> = ({ user, tableData }) => {
 			</thead>
 
 			<tbody>
-				{sortedRows.map((row) => (
-					<tr key={row.name}>
-						<td>{row.name}</td>
-						<td>{row.players}</td>
+				{sortedNotionGames.map((game) => (
+					<tr key={game.name}>
+						<td>{game.name}</td>
+						<td>{game.players}</td>
 						<td>
-							<BigCheckbox checked={row.played} disabled />
+							<BigCheckbox checked={game.played} disabled />
 						</td>
 						<td>
-							<BigCheckbox checked={row.completed} disabled />
+							<BigCheckbox checked={game.completed} disabled />
 						</td>
 						<td>
 							<BigCheckbox
-								checked={Boolean(myVotes[row.name])}
-								onChange={onCheck(row.name)}
+								checked={Boolean(myVotes[game.name])}
+								onChange={onCheck(game.name)}
 								disabled={userReady || voteData.done}
 							/>
 						</td>
 						{others.map((u) => (
 							<td key={u.name}>
-								<BigCheckbox checked={Boolean(voteData.votes[row.name]?.[u.name])} disabled />
+								<BigCheckbox checked={Boolean(voteData.votes[game.name]?.[u.name])} disabled />
 							</td>
 						))}
-						{voteData.done && <td>{row.votes}</td>}
+						{voteData.done && <td>{game.votes}</td>}
 					</tr>
 				))}
 			</tbody>
