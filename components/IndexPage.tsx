@@ -13,11 +13,11 @@ const TableWrapper = styled("div")`
 `;
 
 type Props = {
-	voter: ThisUser;
+	user: ThisUser;
 	isFallback?: boolean;
 };
 
-const IndexPage: FC<Props> = ({ voter, isFallback }) => {
+const IndexPage: FC<Props> = ({ user, isFallback }) => {
 	const { data } = useTableData();
 
 	if (!data) {
@@ -26,7 +26,7 @@ const IndexPage: FC<Props> = ({ voter, isFallback }) => {
 
 	return (
 		<TableWrapper>
-			<GamesTable voter={voter} tableData={data} />
+			<GamesTable user={user} tableData={data} />
 			<AdminPanel isFallback={isFallback} />
 		</TableWrapper>
 	);

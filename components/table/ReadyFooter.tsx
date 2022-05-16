@@ -1,23 +1,23 @@
 import { ChangeEvent, FC } from "react";
 import BigCheckbox from "components/BigCheckbox";
-import { ThisUser, Voter } from "types/User";
+import { ThisUser, User } from "types/User";
 import post from "helpers/post";
 import useVotesData from "components/useVotesData";
 import { VoteData } from "types/Vote";
 
 type Props = {
-	voter: ThisUser;
-	others: Voter[];
+	user: ThisUser;
+	others: User[];
 };
 
-const ReadyFooter: FC<Props> = ({ voter, others }) => {
+const ReadyFooter: FC<Props> = ({ user, others }) => {
 	const { data: voteData, mutate: mutateVoteData } = useVotesData();
 
 	const onCheck = (e: ChangeEvent<HTMLInputElement>) => {
 		const checked = e.target.checked;
 
 		const updateData = (data: VoteData) => {
-			data.ready[voter.name] = checked;
+			data.ready[user.name] = checked;
 			return { ...data };
 		};
 
@@ -39,7 +39,7 @@ const ReadyFooter: FC<Props> = ({ voter, others }) => {
 			<tr>
 				<td colSpan={4}>Ready?</td>
 				<td>
-					<BigCheckbox checked={Boolean(voteData.ready[voter.name])} onChange={onCheck} />
+					<BigCheckbox checked={Boolean(voteData.ready[user.name])} onChange={onCheck} />
 				</td>
 				{others.map((u) => (
 					<td key={u.name}>

@@ -1,5 +1,5 @@
 import { emptyVoteData, Vote, VoteData } from "types/Vote";
-import { Voter } from "types/User";
+import { User } from "types/User";
 import { redisRead, redisWrite } from "pages/api/redis";
 
 export const resetVote = (): Promise<unknown> => {
@@ -16,21 +16,21 @@ export const getVoteState = (): Promise<VoteData> =>
 
 export const setVoteState = (data: VoteData): Promise<unknown> => redisWrite(data);
 
-export const changeReady = (voter: Voter, ready: { checked: boolean }): Promise<unknown> =>
+export const changeReady = (user: User, ready: { checked: boolean }): Promise<unknown> =>
 	getVoteState().then((voteData) => {
-		ensureVoterEntered(voter, voteData);
-		voteData.ready[voter.name] = ready.checked;
+		ensureUserEntered(user, voteData);
+		voteData.ready[user.name] = ready.checked;
 		return setVoteState(voteData);
 	});
 
-export const changeVote = (voter: Voter, vote: Vote): Promise<unknown> =>
+export const changeVote = (user: User, vote: Vote): Promise<unknown> =>
 	getVoteState().then((voteData) => {
-		ensureVoterEntered(voter, voteData);
+		ensureUserEntered(user, voteData);
 		if (!voteData.votes[vote.name]) {
 			voteData.votes[vote.name] = {};
 		}
 
-		voteData.votes[vote.name][voter.name] = vote.checked;
+		voteData.votes[vote.name][user.name] = vote.checked;
 		return setVoteState(voteData);
 	});
 
@@ -46,8 +46,8 @@ export const unfinishVote = (): Promise<unknown> =>
 		return setVoteState(voteData);
 	});
 
-const ensureVoterEntered = (voter: Voter, voteData: VoteData) => {
-	if (voteData.users.every((u) => u.name != voter.name)) {
-		voteData.users = [...voteData.users, { name: voter.name, image: voter.image }]; //destructured to ensure not spoiling email
+const ensureUserEntered = (user: User, voteData: VoteData) => {
+	if (voteData.users.every((u) => u.name != user.name)) {
+		voteData.users = [...voteData.users, { name: user.name, image: user.image }]; //destructured to ensure not spoiling email
 	}
 };

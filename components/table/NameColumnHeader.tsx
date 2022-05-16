@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Voter } from "types/User";
+import { User } from "types/User";
 import NextImage from "next/image";
 import styled from "components/styling/styled";
 
@@ -17,18 +17,18 @@ const AvatarImage = styled("div")`
 `;
 
 type Props = {
-	voter: Voter;
+	user: User;
 };
 
-const NameColumnHeader: FC<Props> = ({ voter }) => (
-	<th key={voter.name}>
+const NameColumnHeader: FC<Props> = ({ user }) => (
+	<th key={user.name}>
 		<NameContainer>
-			{voter.image && (
+			{user.image && (
 				<AvatarImage>
-					<NextImage alt="" height="20" width="20" src={voter.image} />
+					<NextImage alt="" height="20" width="20" src={user.image} />
 				</AvatarImage>
 			)}
-			{voter.name}
+			{user.name}
 		</NameContainer>
 	</th>
 );

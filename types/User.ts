@@ -1,8 +1,8 @@
-export interface ThisUser extends Voter {
+export interface ThisUser extends User {
 	email: string;
 }
 
-export interface Voter {
+export interface User {
 	image?: string | null;
 	name: string;
 }

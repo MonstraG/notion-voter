@@ -43,22 +43,22 @@ const StyledTable = styled("table")`
 
 const sum = (array: number[]): number => array.reduce((acc, next) => acc + next, 0);
 
-const findMyVotes = (voteData: VoteData, voter: ThisUser): Record<string, boolean> => {
+const findMyVotes = (voteData: VoteData, user: ThisUser): Record<string, boolean> => {
 	const myVoteEntries = Object.entries(voteData.votes)
-		.filter(([_, votes]) => votes[voter.name] != null)
-		.map(([game, votes]) => [game, votes[voter.name]]);
+		.filter(([_, votes]) => votes[user.name] != null)
+		.map(([game, votes]) => [game, votes[user.name]]);
 	return Object.fromEntries(myVoteEntries);
 };
 
 type Props = {
-	voter: ThisUser;
+	user: ThisUser;
 	tableData: NotionRow[];
 };
 
-const GamesTable: FC<Props> = ({ voter, tableData }) => {
+const GamesTable: FC<Props> = ({ user, tableData }) => {
 	const { data: voteData, mutate: mutateVoteData } = useVotesData();
 
-	const myVotes = findMyVotes(voteData, voter);
+	const myVotes = findMyVotes(voteData, user);
 
 	const onCheck = (name: string) => (e: ChangeEvent<HTMLInputElement>) => {
 		const checked = e.target.checked;
@@ -67,7 +67,7 @@ const GamesTable: FC<Props> = ({ voter, tableData }) => {
 			if (!data.votes[name]) {
 				data.votes[name] = {};
 			}
-			data.votes[name][voter.name] = checked;
+			data.votes[name][user.name] = checked;
 			return { ...data };
 		};
 
@@ -85,7 +85,7 @@ const GamesTable: FC<Props> = ({ voter, tableData }) => {
 		);
 	};
 
-	const others = voteData.users.filter((u) => u.name != voter.name);
+	const others = voteData.users.filter((u) => u.name != user.name);
 
 	const [sortedRows, setSortedRows] = useState<NotionResultRow[]>(tableData);
 	useEffect(() => {
@@ -108,7 +108,7 @@ const GamesTable: FC<Props> = ({ voter, tableData }) => {
 		}
 	}, [tableData, voteData.done, voteData.votes]);
 
-	const voterReady = Boolean(voteData.ready[voter.name]);
+	const userReady = Boolean(voteData.ready[user.name]);
 
 	return (
 		<StyledTable>
@@ -118,9 +118,9 @@ const GamesTable: FC<Props> = ({ voter, tableData }) => {
 					<th>Players</th>
 					<th>Played</th>
 					<th>Completed</th>
-					<NameColumnHeader voter={voter} />
+					<NameColumnHeader user={user} />
 					{others.map((u) => (
-						<NameColumnHeader voter={u} key={u.name} />
+						<NameColumnHeader user={u} key={u.name} />
 					))}
 					{voteData.done && <th>Total votes</th>}
 				</tr>
@@ -141,7 +141,7 @@ const GamesTable: FC<Props> = ({ voter, tableData }) => {
 							<BigCheckbox
 								checked={Boolean(myVotes[row.name])}
 								onChange={onCheck(row.name)}
-								disabled={voterReady || voteData.done}
+								disabled={userReady || voteData.done}
 							/>
 						</td>
 						{others.map((u) => (
@@ -154,7 +154,7 @@ const GamesTable: FC<Props> = ({ voter, tableData }) => {
 				))}
 			</tbody>
 
-			{tableData && !voteData.done && <ReadyFooter voter={voter} others={others} />}
+			{tableData && !voteData.done && <ReadyFooter user={user} others={others} />}
 		</StyledTable>
 	);
 };

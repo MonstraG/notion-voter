@@ -14,14 +14,14 @@ const Home: NextPage<Props> = ({ vercel, fallbackInfo }) => {
 	});
 
 	if (!vercel && fallbackInfo) {
-		return <IndexPage voter={fallbackInfo} isFallback />;
+		return <IndexPage user={fallbackInfo} isFallback />;
 	}
 
 	if (status !== "authenticated") {
 		return null;
 	}
 
-	return <IndexPage voter={data?.user as ThisUser} />;
+	return <IndexPage user={data?.user as ThisUser} />;
 };
 
 export const getStaticProps: GetStaticProps = () => {

@@ -1,4 +1,4 @@
-import { Voter } from "types/User";
+import { User } from "types/User";
 
 export type Vote = {
 	name: string;
@@ -7,7 +7,7 @@ export type Vote = {
 
 export type VoteData = {
 	votes: Record<string, Record<string, boolean>>; // { game: {user: boolean} }
-	users: Voter[];
+	users: User[];
 	ready: Record<string, boolean>; // { user: boolean }
 	done: boolean;
 };
