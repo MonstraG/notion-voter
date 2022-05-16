@@ -35,6 +35,10 @@ const StyledTable = styled("table")`
 		color: #aaa;
 		text-align: left;
 	}
+
+	tr:nth-child(2n) {
+		background-color: ${({ theme }) => theme.elevation[2]};
+	}
 `;
 
 const sum = (array: number[]): number => array.reduce((acc, next) => acc + next, 0);
