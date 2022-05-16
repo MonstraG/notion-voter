@@ -19,7 +19,7 @@ interface AppPropsEmotion extends AppProps {
 const Main = styled("main")`
 	display: flex;
 	justify-content: center;
-	padding: 4rem 4rem 20vh 4rem;
+	padding: 4rem 2rem 20vh;
 `;
 
 const MyApp = ({
