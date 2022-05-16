@@ -1,21 +1,37 @@
-import { ChangeEvent, Dispatch, FC, SetStateAction } from "react";
+import { ChangeEvent, FC } from "react";
 import BigCheckbox from "components/BigCheckbox";
-import { VoteData } from "types/Vote";
-import { Voter } from "types/User";
+import { ThisUser, Voter } from "types/User";
 import post from "helpers/post";
+import useVotesData from "components/useVotesData";
+import { VoteData } from "types/Vote";
 
 type Props = {
-	voteData: VoteData;
+	voter: ThisUser;
 	others: Voter[];
-	ready: boolean;
-	setReady: Dispatch<SetStateAction<boolean>>;
 };
 
-const ReadyFooter: FC<Props> = ({ voteData, others, ready, setReady }) => {
+const ReadyFooter: FC<Props> = ({ voter, others }) => {
+	const { data: voteData, mutate: mutateVoteData } = useVotesData();
+
 	const onCheck = (e: ChangeEvent<HTMLInputElement>) => {
 		const checked = e.target.checked;
-		setReady(checked);
-		post("/api/vote/ready", { checked });
+
+		const updateData = (data: VoteData) => {
+			data.ready[voter.name] = checked;
+			return { ...data };
+		};
+
+		mutateVoteData(
+			() => {
+				void post("/api/vote/ready", { checked });
+				return null;
+			},
+			{
+				revalidate: false,
+				populateCache: false,
+				optimisticData: updateData
+			}
+		);
 	};
 
 	return (
@@ -23,7 +39,7 @@ const ReadyFooter: FC<Props> = ({ voteData, others, ready, setReady }) => {
 			<tr>
 				<td colSpan={4}>Ready?</td>
 				<td>
-					<BigCheckbox checked={ready} onChange={onCheck} />
+					<BigCheckbox checked={Boolean(voteData.ready[voter.name])} onChange={onCheck} />
 				</td>
 				{others.map((u) => (
 					<td key={u.name}>

@@ -1,6 +1,6 @@
 import { ChangeEvent, FC, useEffect, useState } from "react";
 import type { ThisUser } from "types/User";
-import type { Vote } from "types/Vote";
+import type { Vote, VoteData } from "types/Vote";
 import NameColumnHeader from "components/table/NameColumnHeader";
 import BigCheckbox from "components/BigCheckbox";
 import ReadyFooter from "components/table/ReadyFooter";
@@ -43,31 +43,46 @@ const StyledTable = styled("table")`
 
 const sum = (array: number[]): number => array.reduce((acc, next) => acc + next, 0);
 
+const findMyVotes = (voteData: VoteData, voter: ThisUser): Record<string, boolean> => {
+	const myVoteEntries = Object.entries(voteData.votes)
+		.filter(([_, votes]) => votes[voter.name] != null)
+		.map(([game, votes]) => [game, votes[voter.name]]);
+	return Object.fromEntries(myVoteEntries);
+};
+
 type Props = {
 	voter: ThisUser;
 	tableData: NotionRow[];
 };
 
 const GamesTable: FC<Props> = ({ voter, tableData }) => {
-	const { data: voteData } = useVotesData();
-	const [myVotes, setMyVotes] = useState<Record<string, boolean>>({});
-	const [ready, setReady] = useState<boolean>(false);
+	const { data: voteData, mutate: mutateVoteData } = useVotesData();
 
-	useEffect(() => {
-		const myVoteEntries = Object.entries(voteData.votes)
-			.filter(([_, votes]) => votes[voter.name] != null)
-			.map(([game, votes]) => {
-				return [game, votes[voter.name]];
-			});
-
-		setMyVotes(Object.fromEntries(myVoteEntries));
-	}, [voter, voteData]);
+	const myVotes = findMyVotes(voteData, voter);
 
 	const onCheck = (name: string) => (e: ChangeEvent<HTMLInputElement>) => {
 		const checked = e.target.checked;
-		setMyVotes((prev) => ({ ...prev, [name]: checked }));
-		const vote: Vote = { name, checked };
-		post("/api/vote/post", vote);
+
+		const updateData = (data: VoteData) => {
+			if (!data.votes[name]) {
+				data.votes[name] = {};
+			}
+			data.votes[name][voter.name] = checked;
+			return { ...data };
+		};
+
+		mutateVoteData(
+			() => {
+				const vote: Vote = { name, checked };
+				void post("/api/vote/post", vote);
+				return null;
+			},
+			{
+				revalidate: false,
+				populateCache: false,
+				optimisticData: updateData
+			}
+		);
 	};
 
 	const others = voteData.users.filter((u) => u.name != voter.name);
@@ -92,6 +107,8 @@ const GamesTable: FC<Props> = ({ voter, tableData }) => {
 			setSortedRows(copy);
 		}
 	}, [tableData, voteData.done, voteData.votes]);
+
+	const voterReady = Boolean(voteData.ready[voter.name]);
 
 	return (
 		<StyledTable>
@@ -124,7 +141,7 @@ const GamesTable: FC<Props> = ({ voter, tableData }) => {
 							<BigCheckbox
 								checked={Boolean(myVotes[row.name])}
 								onChange={onCheck(row.name)}
-								disabled={ready || voteData.done}
+								disabled={voterReady || voteData.done}
 							/>
 						</td>
 						{others.map((u) => (
@@ -137,9 +154,7 @@ const GamesTable: FC<Props> = ({ voter, tableData }) => {
 				))}
 			</tbody>
 
-			{tableData && !voteData.done && (
-				<ReadyFooter voteData={voteData} others={others} ready={ready} setReady={setReady} />
-			)}
+			{tableData && !voteData.done && <ReadyFooter voter={voter} others={others} />}
 		</StyledTable>
 	);
 };
