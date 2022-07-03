@@ -8,6 +8,7 @@ import type { EmotionCache } from "@emotion/cache";
 import { CacheProvider } from "@emotion/react";
 import createEmotionCache from "components/styling/createEmotionTheme";
 import styled from "components/styling/styled";
+import { SWRConfig } from "swr";
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -36,9 +37,11 @@ const MyApp = ({
 		</Head>
 		<ThemeProvider theme={theme}>
 			<SessionProvider session={session}>
-				<Main>
-					<Component {...pageProps} />
-				</Main>
+				<SWRConfig value={{ fetcher: (url: string) => fetch(url).then((res) => res.json()) }}>
+					<Main>
+						<Component {...pageProps} />
+					</Main>
+				</SWRConfig>
 			</SessionProvider>
 		</ThemeProvider>
 	</CacheProvider>

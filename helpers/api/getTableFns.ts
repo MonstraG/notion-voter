@@ -1,5 +1,5 @@
 import { NotionRow } from "types/Row";
-import notion from "pages/api/notion";
+import notion from "helpers/api/notion";
 
 type DatabaseRow = UnArray<Awaited<TableRowsQueryResult>>;
 

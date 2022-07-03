@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { resetVote } from "pages/api/vote";
+import { resetVote } from "helpers/api/vote";
 import doIfLoggedIn from "pages/api/authConditionals/doIfLoggedIn";
 import doIfIsAdmin from "pages/api/authConditionals/doIfIsAdmin";
 

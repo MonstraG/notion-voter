@@ -1,7 +1,6 @@
 import { FC } from "react";
 import useTableData from "components/table/useTableData";
 import GamesTable from "components/table/GamesTable";
-import { ThisUser } from "types/User";
 import Loader from "components/Loader";
 import styled from "components/styling/styled";
 import AdminPanel from "components/AdminPanel";
@@ -13,11 +12,10 @@ const TableWrapper = styled("div")`
 `;
 
 type Props = {
-	user: ThisUser;
 	isFallback?: boolean;
 };
 
-const IndexPage: FC<Props> = ({ user, isFallback }) => {
+const IndexPage: FC<Props> = ({ isFallback }) => {
 	const { data } = useTableData();
 
 	if (!data) {
@@ -26,7 +24,7 @@ const IndexPage: FC<Props> = ({ user, isFallback }) => {
 
 	return (
 		<TableWrapper>
-			<GamesTable user={user} tableData={data} />
+			<GamesTable />
 			<AdminPanel isFallback={isFallback} />
 		</TableWrapper>
 	);

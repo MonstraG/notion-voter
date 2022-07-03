@@ -11,6 +11,4 @@ export const redisRead = (): Promise<unknown> =>
 	client
 		.get(dataKey)
 		.then((result) => JSON.parse(result))
-		.catch(() => {
-			return null;
-		});
+		.catch(() => null);
