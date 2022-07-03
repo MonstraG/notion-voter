@@ -2,7 +2,7 @@ import { FC } from "react";
 import useTableData from "components/table/useTableData";
 import GamesTable from "components/table/GamesTable";
 import Loader from "components/Loader";
-import styled from "components/styling/styled";
+import styled from "components/styles/styled";
 import AdminPanel from "components/AdminPanel";
 
 const TableWrapper = styled("div")`

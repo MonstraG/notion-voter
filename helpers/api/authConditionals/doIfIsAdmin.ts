@@ -1,5 +1,5 @@
 import { ThisUser } from "types/User";
-import { Callback } from "pages/api/authConditionals/doIfLoggedIn";
+import { Callback } from "helpers/api/authConditionals/doIfLoggedIn";
 
 const adminWhitelist: string[] = JSON.parse(process.env.ADMIN_WHITELIST);
 

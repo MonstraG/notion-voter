@@ -1,5 +1,5 @@
 import { FC } from "react";
-import styled from "components/styling/styled";
+import styled from "components/styles/styled";
 import { css } from "@emotion/react";
 
 const LoaderWrapper = styled("div")<{ $button?: boolean }>`

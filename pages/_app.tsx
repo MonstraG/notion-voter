@@ -1,21 +1,15 @@
 import { AppProps } from "next/app";
 import Head from "next/head";
-import "components/styling/globals.css";
 import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "@emotion/react";
-import theme from "components/styling/theme";
-import type { EmotionCache } from "@emotion/cache";
+import theme from "components/styles/theme";
 import { CacheProvider } from "@emotion/react";
-import createEmotionCache from "components/styling/createEmotionTheme";
-import styled from "components/styling/styled";
+import styled from "components/styles/styled";
 import { SWRConfig } from "swr";
+import globalStyles from "components/styles/globalStyles";
+import createCache from "@emotion/cache";
 
-// Client-side cache, shared for the whole session of the user in the browser.
-const clientSideEmotionCache = createEmotionCache();
-
-interface AppPropsEmotion extends AppProps {
-	emotionCache?: EmotionCache;
-}
+const cache = createCache({ key: "css", prepend: true });
 
 const Main = styled("main")`
 	display: flex;
@@ -23,12 +17,8 @@ const Main = styled("main")`
 	padding: 4rem 2rem 20vh;
 `;
 
-const MyApp = ({
-	Component,
-	emotionCache = clientSideEmotionCache,
-	pageProps: { session, ...pageProps }
-}: AppPropsEmotion) => (
-	<CacheProvider value={emotionCache}>
+const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
+	<CacheProvider value={cache}>
 		<Head>
 			<title>Notion game-voting app 3000</title>
 			<meta charSet="utf-8" />
@@ -36,6 +26,7 @@ const MyApp = ({
 			<link rel="icon" href="/favicon.ico" />
 		</Head>
 		<ThemeProvider theme={theme}>
+			{globalStyles}
 			<SessionProvider session={session}>
 				<SWRConfig value={{ fetcher: (url: string) => fetch(url).then((res) => res.json()) }}>
 					<Main>

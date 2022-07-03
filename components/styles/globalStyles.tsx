@@ -1,0 +1,34 @@
+import { css, Global } from "@emotion/react";
+
+export const globalStyles = (
+	<Global
+		styles={css`
+      html {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        box-sizing: border-box;
+        -webkit-text-size-adjust: 100%;
+      }
+
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+        Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+        background: #222;
+        color: #eee;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      *, *::before, *::after {
+        box-sizing: inherit
+      }
+		`
+		}
+	/>
+);
+
+export default globalStyles;

@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import useIsAdmin from "components/useIsAdmin";
-import styled from "components/styling/styled";
+import styled from "components/styles/styled";
 import Button from "components/Button";
 import useVotesData from "components/useVotesData";
 import { VoteData } from "types/Vote";

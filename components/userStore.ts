@@ -1,9 +1,11 @@
 import create from "zustand";
 import { ThisUser } from "types/User";
 
-const userStore = create<{
+type UserState = {
 	user: ThisUser;
 	fallback: boolean;
-}>(null);
+}
+
+const userStore = create<UserState>(null);
 
 export default userStore;

@@ -27,7 +27,7 @@ const TableBody: FC<Props> = ({}) => {
 					}
 				}
 			})),
-		[change]
+		[change, user.name]
 	);
 
 	const [sortedNotionGames, setSortedNotionGames] = useState<NotionResultRow[]>(tableData);

@@ -1,5 +1,5 @@
 import { FC, InputHTMLAttributes } from "react";
-import styled from "components/styling/styled";
+import styled from "components/styles/styled";
 
 const StyledCheckbox = styled("input")`
 	width: 16px;

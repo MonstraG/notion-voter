@@ -14,7 +14,7 @@ const ReadyFooter: FC = ({}) => {
 				...data,
 				ready: { ...data.ready, [user.name]: e.target.checked }
 			})),
-		[change]
+		[change, user.name]
 	);
 
 	return (

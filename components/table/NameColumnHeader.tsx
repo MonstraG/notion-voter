@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { User } from "types/User";
 import NextImage from "next/image";
-import styled from "components/styling/styled";
+import styled from "components/styles/styled";
 
 const NameContainer = styled("div")`
 	display: flex;

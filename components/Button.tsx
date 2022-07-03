@@ -1,5 +1,5 @@
 import { ButtonHTMLAttributes, FC } from "react";
-import styled from "components/styling/styled";
+import styled from "components/styles/styled";
 import { css } from "@emotion/react";
 import Loader from "components/Loader";
 

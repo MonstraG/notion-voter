@@ -2,7 +2,7 @@ import { FC } from "react";
 import NameColumnHeader from "components/table/NameColumnHeader";
 import ReadyFooter from "components/table/ReadyFooter";
 import useVotesData from "components/useVotesData";
-import styled from "components/styling/styled";
+import styled from "components/styles/styled";
 import userStore from "components/userStore";
 import TableBody from "components/table/TableBody";
 
