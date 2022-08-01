@@ -7,46 +7,45 @@ import userStore from "components/userStore";
 import Loader from "components/Loader";
 
 type Props = {
-	vercel: boolean;
+	isVercel: boolean;
 	fallbackInfo: ThisUser | null;
 };
 
-const Home: NextPage<Props> = ({ vercel, fallbackInfo }) => {
+const Home: NextPage<Props> = ({ isVercel, fallbackInfo }) => {
 	const { status, data } = useSession({
-		required: vercel
+		required: isVercel
 	});
 
 	useEffect(() => {
+		if (fallbackInfo) {
+			userStore.setState({
+				user: fallbackInfo,
+				fallback: true
+			});
+			return;
+		}
+
 		if (status == "authenticated") {
 			userStore.setState({
 				user: data.user as ThisUser,
 				fallback: false
 			});
-		} else if (vercel && fallbackInfo) {
-			userStore.setState({
-				user: fallbackInfo,
-				fallback: true
-			});
 		}
-	}, [vercel, fallbackInfo, data, status]);
+	}, [isVercel, fallbackInfo, data, status]);
 
-	if (!vercel && fallbackInfo) {
-		return <IndexPage isFallback />;
-	}
-
-	if (status !== "authenticated") {
+	if (isVercel && status !== "authenticated") {
 		return <Loader />;
 	}
 
-	return <IndexPage />;
+	return <IndexPage isFallback={Boolean(fallbackInfo)} />;
 };
 
 export const getStaticProps: GetStaticProps = () => {
-	const vercel = Boolean(process.env.VERCEL);
+	const isVercel = Boolean(process.env.VERCEL);
 	return {
 		props: {
-			vercel,
-			fallbackInfo: !vercel ? JSON.parse(process.env.FALLBACK_USER_INFO!) : null
+			isVercel,
+			fallbackInfo: !isVercel ? JSON.parse(process.env.FALLBACK_USER_INFO) : null
 		}
 	};
 };

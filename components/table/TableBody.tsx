@@ -1,6 +1,6 @@
 import { ChangeEvent, FC, useCallback, useEffect, useState } from "react";
 import BigCheckbox from "components/BigCheckbox";
-import { VoteData } from "types/Vote";
+import { emptyVoteData, VoteData } from "types/Vote";
 import { NotionResultRow } from "types/Row";
 import useVotesData from "components/useVotesData";
 import userStore from "components/userStore";
@@ -8,16 +8,15 @@ import useTableData from "components/table/useTableData";
 
 const sum = (array: number[]): number => array.reduce((acc, next) => acc + next, 0);
 
-type Props = {};
-
-const TableBody: FC<Props> = ({}) => {
+const TableBody: FC = ({}) => {
 	const { user } = userStore();
 	const { data: voteData, change } = useVotesData();
 	const { data: tableData } = useTableData();
 
 	const onCheck = useCallback(
 		(gameName: string) => (e: ChangeEvent<HTMLInputElement>) =>
-			change((data: VoteData) => ({
+			// default value is a clutch here
+			change((data: VoteData = emptyVoteData) => ({
 				...data,
 				votes: {
 					...data.votes,

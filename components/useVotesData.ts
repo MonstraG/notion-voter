@@ -1,6 +1,5 @@
 import useSWR from "swr";
-import { emptyVoteData, MyVotes, VoteData } from "types/Vote";
-import { User } from "types/User";
+import { emptyVoteData, FullVotesData, MyVotes, VoteData } from "types/Vote";
 import userStore from "components/userStore";
 import post from "helpers/post";
 import debounce from "components/debounce";
@@ -23,11 +22,6 @@ const sendMyVotes = (myVotes: MyVotes) =>
 
 const debouncedSendMyVotes = debounce(sendMyVotes, 7000);
 
-type FullVotesData = VoteData & {
-	myVotes?: Record<string, boolean>;
-	userReady?: boolean;
-	others: User[];
-};
 // TODO: REWRITE THIS TO NOT USE SWR, EMULATE IT TRU ZUSTAND (maybe not, knowing about swr 2.0)
 // POST RETURNS NEW STATE, THAT CAN DELAY NEXT REFRESH
 

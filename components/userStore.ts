@@ -4,8 +4,8 @@ import { ThisUser } from "types/User";
 type UserState = {
 	user: ThisUser;
 	fallback: boolean;
-}
+};
 
-const userStore = create<UserState>(null);
+const userStore = create<UserState>(() => ({ user: null, fallback: false }));
 
 export default userStore;

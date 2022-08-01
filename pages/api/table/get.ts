@@ -1,18 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { NotionRow } from "types/Row";
-import getNotionTable from "helpers/api/getTableFns";
+import type { NotionRow } from "types/Row";
+import notionTable from "helpers/api/getTableFns";
 import doIfLoggedIn from "helpers/api/authConditionals/doIfLoggedIn";
 
 export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse<NotionRow[] | string>
 ) {
-	await doIfLoggedIn(req, res, async () => {
-		if (typeof process.env.DATABASE_ID !== "string") {
-			res.status(500).send("DATABASE_ID not set");
-			return;
-		}
-
-		return await getNotionTable(process.env.DATABASE_ID);
-	});
+	await doIfLoggedIn(req, res, () => notionTable);
 }

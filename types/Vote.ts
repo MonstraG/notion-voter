@@ -7,11 +7,24 @@ export type VoteData = {
 	done: boolean;
 };
 
+export type FullVotesData = VoteData & {
+	myVotes?: Record<string, boolean>;
+	userReady?: boolean;
+	others: User[];
+};
+
 export const emptyVoteData: VoteData = {
 	votes: {},
 	users: [],
 	ready: {},
 	done: false
+};
+
+export const emptyFullVoteData: FullVotesData = {
+	...emptyVoteData,
+	myVotes: {},
+	others: [],
+	userReady: false
 };
 
 export type MyVotes = {
