@@ -20,13 +20,6 @@ export const emptyVoteData: VoteData = {
 	done: false
 };
 
-export const emptyFullVoteData: FullVotesData = {
-	...emptyVoteData,
-	myVotes: {},
-	others: [],
-	userReady: false
-};
-
 export type MyVotes = {
 	votes: Record<string, boolean>; // { game: boolean }
 	ready: boolean;
