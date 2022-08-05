@@ -12,9 +12,15 @@ type Props = {
 };
 
 const Home: NextPage<Props> = ({ isVercel, fallbackInfo }) => {
-	const { status, data } = useSession({
-		required: isVercel
-	});
+	const { status, data } = useSession();
+	useEffect(() => {
+		if (status === "authenticated") {
+			userStore.setState({
+				user: data.user as ThisUser,
+				fallback: false
+			});
+		}
+	}, [data, status]);
 
 	useEffect(() => {
 		if (fallbackInfo) {
@@ -22,22 +28,14 @@ const Home: NextPage<Props> = ({ isVercel, fallbackInfo }) => {
 				user: fallbackInfo,
 				fallback: true
 			});
-			return;
 		}
-
-		if (status == "authenticated") {
-			userStore.setState({
-				user: data.user as ThisUser,
-				fallback: false
-			});
-		}
-	}, [isVercel, fallbackInfo, data, status]);
+	}, [fallbackInfo]);
 
 	if (isVercel && status !== "authenticated") {
 		return <Loader />;
 	}
 
-	return <IndexPage isFallback={Boolean(fallbackInfo)} />;
+	return <IndexPage />;
 };
 
 export const getStaticProps: GetStaticProps = () => {

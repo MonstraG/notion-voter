@@ -11,11 +11,7 @@ const TableWrapper = styled("div")`
 	flex-direction: column;
 `;
 
-type Props = {
-	isFallback?: boolean;
-};
-
-const IndexPage: FC<Props> = ({ isFallback }) => {
+const IndexPage: FC = () => {
 	const { data } = useTableData();
 
 	if (!data) {
@@ -25,7 +21,7 @@ const IndexPage: FC<Props> = ({ isFallback }) => {
 	return (
 		<TableWrapper>
 			<GamesTable />
-			<AdminPanel isFallback={isFallback} />
+			<AdminPanel />
 		</TableWrapper>
 	);
 };

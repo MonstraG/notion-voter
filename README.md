@@ -12,3 +12,5 @@ https://vercel.com
 #### deps info
 
 regenerator-runtime: https://github.com/swc-project/swc/discussions/1678#discussioncomment-722665
+
+todo: use `/next/future/image` for avatars

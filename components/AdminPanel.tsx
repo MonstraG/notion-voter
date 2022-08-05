@@ -4,6 +4,7 @@ import styled from "components/styles/styled";
 import Button from "components/Button";
 import useVotesData from "components/useVotesData";
 import { VoteData } from "types/Vote";
+import userStore from "components/userStore";
 
 const Buttons = styled("div")`
 	display: flex;
@@ -32,22 +33,19 @@ const actions: Record<string, AdminButtonProps> = {
 	}
 };
 
-type Props = {
-	isFallback: boolean;
-};
-
-const AdminPanel: FC<Props> = ({ isFallback }) => {
+const AdminPanel: FC = () => {
 	const isAdmin = useIsAdmin();
+	const { fallback } = userStore();
 
 	const { data: voteData } = useVotesData();
 
 	const [fetching, setFetching] = useState<keyof typeof actions | null>(null);
 
-	if (!isAdmin && !isFallback) return null;
+	if (!isAdmin && !fallback) return null;
 
 	const onClick = (key: string) => () => {
 		setFetching(key);
-		fetch(`api/vote/admin/${key}`).finally(() => setFetching(null));
+		fetch(`api/admin/${key}`).finally(() => setFetching(null));
 	};
 
 	const loading = Boolean(fetching);
