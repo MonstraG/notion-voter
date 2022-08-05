@@ -1,10 +1,10 @@
 import { FC, useState } from "react";
-import useIsAdmin from "components/useIsAdmin";
+import useIsAdmin from "components/AdminPanel/useIsAdmin";
 import styled from "components/styles/styled";
 import Button from "components/Button";
-import useVotesData from "components/useVotesData";
+import useVotesData from "components/hooks/useVotesData/useVotesData";
 import { VoteData } from "types/Vote";
-import userStore from "components/userStore";
+import userStore from "components/hooks/userStore";
 
 const Buttons = styled("div")`
 	display: flex;

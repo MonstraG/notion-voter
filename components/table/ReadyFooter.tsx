@@ -1,8 +1,8 @@
 import { ChangeEvent, FC, useCallback } from "react";
 import BigCheckbox from "components/BigCheckbox";
-import useVotesData from "components/useVotesData";
+import useVotesData from "components/hooks/useVotesData/useVotesData";
 import type { VoteData } from "types/Vote";
-import userStore from "components/userStore";
+import userStore from "components/hooks/userStore";
 
 const ReadyFooter: FC = ({}) => {
 	const { data: voteData, change } = useVotesData();

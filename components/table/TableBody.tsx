@@ -2,8 +2,8 @@ import { ChangeEvent, FC, useCallback, useEffect, useState } from "react";
 import BigCheckbox from "components/BigCheckbox";
 import { emptyVoteData, VoteData } from "types/Vote";
 import { NotionResultRow } from "types/Row";
-import useVotesData from "components/useVotesData";
-import userStore from "components/userStore";
+import useVotesData from "components/hooks/useVotesData/useVotesData";
+import userStore from "components/hooks/userStore";
 import useTableData from "components/table/useTableData";
 
 const sum = (array: number[]): number => array.reduce((acc, next) => acc + next, 0);

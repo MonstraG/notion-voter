@@ -6,6 +6,7 @@ const nextConfig = {
 	compiler: {
 		emotion: true
 	},
+	pageExtensions: ["api.ts", "page.tsx"],
 	experimental: {
 		legacyBrowsers: false,
 		browsersListForSwc: true

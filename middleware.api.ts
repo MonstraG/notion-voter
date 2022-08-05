@@ -21,8 +21,3 @@ export default withAuth({
 		}
 	}
 });
-
-// https://github.com/nextauthjs/next-auth-example
-// 	https://next-auth.js.org/configuration/nextjs#middleware
-// 		https://nextjs.org/docs/authentication
-// 			https://nextjs.org/docs/api-reference/next/server

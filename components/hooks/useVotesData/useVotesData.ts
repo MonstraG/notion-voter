@@ -1,8 +1,8 @@
 import useSWR from "swr";
 import { emptyVoteData, FullVotesData, MyVotes, VoteData } from "types/Vote";
-import userStore from "components/userStore";
-import post from "helpers/post";
-import debounce from "components/debounce";
+import userStore from "components/hooks/userStore";
+import post from "pages/post";
+import debounce from "components/hooks/useVotesData/debounce";
 import { useCallback } from "react";
 
 const findMyVotes = (voteData: VoteData, userName: string): Record<string, boolean> => {

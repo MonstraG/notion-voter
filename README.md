@@ -14,3 +14,10 @@ https://vercel.com
 regenerator-runtime: https://github.com/swc-project/swc/discussions/1678#discussioncomment-722665
 
 todo: use `/next/future/image` for avatars
+
+
+various auth reference links:
+- https://github.com/nextauthjs/next-auth-example
+- https://next-auth.js.org/configuration/nextjs#middleware
+- https://nextjs.org/docs/authentication
+- https://nextjs.org/docs/api-reference/next/server

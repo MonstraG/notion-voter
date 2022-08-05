@@ -1,6 +1,6 @@
 import { emptyVoteData, MyVotes, VoteData } from "types/Vote";
 import { User } from "types/User";
-import { redisRead, redisWrite } from "helpers/api/redis";
+import { redisRead, redisWrite } from "pages/api/vote/redis";
 
 export const resetVote = (): Promise<unknown> => redisWrite(emptyVoteData);
 

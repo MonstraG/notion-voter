@@ -1,9 +1,9 @@
 import { FC } from "react";
 import NameColumnHeader from "components/table/NameColumnHeader";
 import ReadyFooter from "components/table/ReadyFooter";
-import useVotesData from "components/useVotesData";
+import useVotesData from "components/hooks/useVotesData/useVotesData";
 import styled from "components/styles/styled";
-import userStore from "components/userStore";
+import userStore from "components/hooks/userStore";
 import TableBody from "components/table/TableBody";
 
 const StyledTable = styled("table")`
