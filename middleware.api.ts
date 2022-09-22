@@ -13,7 +13,7 @@ export default withAuth({
 
 			// `/api/admin` requires admin role
 			if (req.nextUrl.pathname.startsWith("/api/admin")) {
-				return adminWhitelist.includes(token?.email);
+				return adminWhitelist.includes(token.email);
 			}
 
 			// everything else is fine, we already checked for token

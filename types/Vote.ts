@@ -1,8 +1,8 @@
-import { User } from "types/User";
+import type { PlatformUser } from "types/next-auth";
 
 export type VoteData = {
 	votes: Record<string, Record<string, boolean>>; // { game: { user: boolean } }
-	users: User[];
+	users: PlatformUser[];
 	ready: Record<string, boolean>; // { user: boolean }
 	done: boolean;
 };
@@ -10,7 +10,7 @@ export type VoteData = {
 export type FullVotesData = VoteData & {
 	myVotes?: Record<string, boolean>;
 	userReady?: boolean;
-	others: User[];
+	others: PlatformUser[];
 };
 
 export const emptyVoteData: VoteData = {

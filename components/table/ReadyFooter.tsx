@@ -1,36 +1,37 @@
-import { ChangeEvent, FC, useCallback } from "react";
-import BigCheckbox from "components/BigCheckbox";
+import type { ChangeEvent, FC } from "react";
 import useVotesData from "components/hooks/useVotesData/useVotesData";
-import type { VoteData } from "types/Vote";
-import userStore from "components/hooks/userStore";
+import { useSession } from "next-auth/react";
+import { Checkbox, TableCell, TableFooter, TableRow } from "@mui/material";
 
-const ReadyFooter: FC = ({}) => {
+const ReadyFooter: FC = () => {
 	const { data: voteData, change } = useVotesData();
-	const { user } = userStore();
+	const { data: session } = useSession();
 
-	const onCheck = useCallback(
-		(e: ChangeEvent<HTMLInputElement>) =>
-			change((data: VoteData) => ({
-				...data,
-				ready: { ...data.ready, [user.name]: e.target.checked }
-			})),
-		[change, user.name]
-	);
+	const onCheck = (e: ChangeEvent<HTMLInputElement>) => {
+		const updated = {
+			...voteData,
+			ready: { ...voteData.ready, [session.user.name]: e.target.checked }
+		};
+		change(updated);
+	};
 
 	return (
-		<tfoot>
-			<tr>
-				<td colSpan={4}>Ready?</td>
-				<td>
-					<BigCheckbox checked={Boolean(voteData.ready[user.name])} onChange={onCheck} />
-				</td>
+		<TableFooter>
+			<TableRow>
+				<TableCell colSpan={4}>Ready?</TableCell>
+				<TableCell padding="checkbox">
+					<Checkbox
+						checked={Boolean(voteData.ready[session.user.name])}
+						onChange={onCheck}
+					/>
+				</TableCell>
 				{voteData.others.map((u) => (
-					<td key={u.name}>
-						<BigCheckbox checked={Boolean(voteData.ready[u.name])} disabled />
-					</td>
+					<TableCell padding="checkbox" key={u.name}>
+						<Checkbox checked={Boolean(voteData.ready[u.name])} disabled />
+					</TableCell>
 				))}
-			</tr>
-		</tfoot>
+			</TableRow>
+		</TableFooter>
 	);
 };
 

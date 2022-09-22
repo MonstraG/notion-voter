@@ -9,7 +9,18 @@ const nextConfig = {
 	pageExtensions: ["api.ts", "page.tsx"],
 	experimental: {
 		legacyBrowsers: false,
-		browsersListForSwc: true
+		browsersListForSwc: true,
+		modularizeImports: {
+			"@mui/material": {
+				transform: "@mui/material/{{member}}"
+			},
+			"@mui/lab": {
+				transform: "@mui/lab/{{member}}"
+			},
+			"@mui/base": {
+				transform: "@mui/base/{{member}}"
+			}
+		}
 	},
 	images: {
 		domains: ["cdn.discordapp.com"]

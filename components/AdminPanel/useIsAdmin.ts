@@ -2,11 +2,11 @@ import useSWRImmutable from "swr/immutable";
 import { useSession } from "next-auth/react";
 
 const useIsAdmin = (): boolean => {
-	const { status } = useSession({ required: false });
+	const { status } = useSession();
 
 	const authenticated = status === "authenticated";
 	const { data: isAdminResponse } = useSWRImmutable<boolean | null>(
-		authenticated ? "/api/auth/isAdmin/" : null
+		authenticated ? "/api/admin/isAdmin" : null
 	);
 
 	return isAdminResponse ?? false;

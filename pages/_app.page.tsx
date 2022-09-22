@@ -1,13 +1,14 @@
-import { AppProps } from "next/app";
+import type { AppProps } from "next/app";
 import Head from "next/head";
-import { SessionProvider } from "next-auth/react";
-import { ThemeProvider } from "@emotion/react";
-import theme from "components/styles/theme";
+import { SessionProvider, type SessionProviderProps } from "next-auth/react";
 import { CacheProvider } from "@emotion/react";
 import styled from "components/styles/styled";
 import { SWRConfig } from "swr";
-import globalStyles from "components/styles/globalStyles";
 import createCache from "@emotion/cache";
+import { get } from "pages/requests";
+import { ThemeProvider } from "@mui/material/styles";
+import { CssBaseline } from "@mui/material";
+import { theme } from "components/styles/theme";
 
 const cache = createCache({ key: "css", prepend: true });
 
@@ -17,18 +18,18 @@ const Main = styled("main")`
 	padding: 4rem 2rem 20vh;
 `;
 
-const MyApp = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
+const MyApp = ({
+	Component,
+	pageProps: { session, ...pageProps }
+}: AppProps<SessionProviderProps>) => (
 	<CacheProvider value={cache}>
 		<Head>
 			<title>Notion game-voting app 3000</title>
-			<meta charSet="utf-8" />
-			<meta name="viewport" content="initial-scale=1.0, width=device-width" />
-			<link rel="icon" href="/favicon.ico" />
 		</Head>
 		<ThemeProvider theme={theme}>
-			{globalStyles}
+			<CssBaseline />
 			<SessionProvider session={session}>
-				<SWRConfig value={{ fetcher: (url: string) => fetch(url).then((res) => res.json()) }}>
+				<SWRConfig value={{ fetcher: get }}>
 					<Main>
 						<Component {...pageProps} />
 					</Main>

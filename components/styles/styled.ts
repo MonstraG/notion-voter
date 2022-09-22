@@ -1,11 +1,12 @@
-import emotionStyled, { CreateStyled } from "@emotion/styled";
+import { styled as muiStyled, type Theme, type CreateMUIStyled } from "@mui/material/styles";
+import type { Component } from "react";
 
-type params = Parameters<CreateStyled>;
-
-const transientOptions: params[1] = {
+const transientOptions: Parameters<typeof muiStyled>[1] = {
 	shouldForwardProp: (propName: string) => !propName.startsWith("$")
 };
 
-const styled = (tag: params[0]) => emotionStyled(tag, transientOptions);
+// this exists only because of https://github.com/emotion-js/emotion/issues/2193
+const styled: CreateMUIStyled<Theme> = (tag: keyof JSX.IntrinsicElements | Component) =>
+	muiStyled(tag as any, transientOptions);
 
 export default styled;

@@ -1,10 +1,9 @@
-import { FC, useState } from "react";
+import { type FC, useState } from "react";
 import useIsAdmin from "components/AdminPanel/useIsAdmin";
 import styled from "components/styles/styled";
-import Button from "components/Button";
+import Button from "components/CustomButton";
 import useVotesData from "components/hooks/useVotesData/useVotesData";
-import { VoteData } from "types/Vote";
-import userStore from "components/hooks/userStore";
+import type { VoteData } from "types/Vote";
 
 const Buttons = styled("div")`
 	display: flex;
@@ -34,21 +33,19 @@ const actions: Record<string, AdminButtonProps> = {
 };
 
 const AdminPanel: FC = () => {
-	const isAdmin = useIsAdmin();
-	const { fallback } = userStore();
-
 	const { data: voteData } = useVotesData();
+	const isAdmin = useIsAdmin();
 
 	const [fetching, setFetching] = useState<keyof typeof actions | null>(null);
 
-	if (!isAdmin && !fallback) return null;
+	if (!isAdmin) return null;
 
 	const onClick = (key: string) => () => {
 		setFetching(key);
 		fetch(`api/admin/${key}`).finally(() => setFetching(null));
 	};
 
-	const loading = Boolean(fetching);
+	const loading = Boolean(fetching) || !voteData;
 	return (
 		<Buttons>
 			{Object.entries(actions).map(([key, props]) => (

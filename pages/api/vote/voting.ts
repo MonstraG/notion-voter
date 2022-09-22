@@ -1,6 +1,6 @@
-import { emptyVoteData, MyVotes, VoteData } from "types/Vote";
-import { User } from "types/User";
+import { emptyVoteData, type MyVotes, type VoteData } from "types/Vote";
 import { redisRead, redisWrite } from "pages/api/vote/redis";
+import type { PlatformUser } from "types/next-auth";
 
 export const resetVote = (): Promise<unknown> => redisWrite(emptyVoteData);
 
@@ -12,7 +12,7 @@ export const getVoteState = (): Promise<VoteData> =>
 		return data as VoteData;
 	});
 
-export const changeVote = (user: User, vote: MyVotes): Promise<unknown> =>
+export const changeVote = (user: PlatformUser, vote: MyVotes): Promise<unknown> =>
 	changeVoteState((voteData: VoteData) => {
 		// ensure user entered
 		if (voteData.users.every((u) => u.name != user.name)) {
@@ -43,6 +43,6 @@ export const changeVoteFinishStatus = (done: boolean): Promise<unknown> =>
 export const changeVoteState = (action: (voteData: VoteData) => VoteData) =>
 	getVoteState().then((voteData) => {
 		const updated = action(voteData);
-		redisWrite(updated);
+		void redisWrite(updated);
 		return updated;
 	});

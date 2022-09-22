@@ -1,33 +1,30 @@
-import { ChangeEvent, FC, useCallback, useEffect, useState } from "react";
-import BigCheckbox from "components/BigCheckbox";
-import { emptyVoteData, VoteData } from "types/Vote";
+import { ChangeEvent, FC, useEffect, useState } from "react";
 import { NotionResultRow } from "types/Row";
 import useVotesData from "components/hooks/useVotesData/useVotesData";
-import userStore from "components/hooks/userStore";
 import useTableData from "components/table/useTableData";
+import { useSession } from "next-auth/react";
+import { Checkbox, TableBody, TableCell, TableRow } from "@mui/material";
 
 const sum = (array: number[]): number => array.reduce((acc, next) => acc + next, 0);
 
-const TableBody: FC = ({}) => {
-	const { user } = userStore();
+const GamesTableBody: FC = () => {
+	const { data: session } = useSession();
 	const { data: voteData, change } = useVotesData();
 	const { data: tableData } = useTableData();
 
-	const onCheck = useCallback(
-		(gameName: string) => (e: ChangeEvent<HTMLInputElement>) =>
-			// default value is a clutch here
-			change((data: VoteData = emptyVoteData) => ({
-				...data,
-				votes: {
-					...data.votes,
-					[gameName]: {
-						...(data.votes[gameName] || {}),
-						[user.name]: e.target.checked
-					}
+	const onCheck = (gameName: string) => (e: ChangeEvent<HTMLInputElement>) => {
+		const updated = {
+			...voteData,
+			votes: {
+				...voteData.votes,
+				[gameName]: {
+					...(voteData.votes[gameName] || {}),
+					[session.user.name]: e.target.checked
 				}
-			})),
-		[change, user.name]
-	);
+			}
+		};
+		change(updated);
+	};
 
 	const [sortedNotionGames, setSortedNotionGames] = useState<NotionResultRow[]>(tableData);
 	useEffect(() => {
@@ -51,34 +48,37 @@ const TableBody: FC = ({}) => {
 	}, [tableData, voteData.done, voteData.votes]);
 
 	return (
-		<tbody>
+		<TableBody>
 			{sortedNotionGames.map((game) => (
-				<tr key={game.name}>
-					<td>{game.name}</td>
-					<td>{game.players}</td>
-					<td>
-						<BigCheckbox checked={game.played} disabled />
-					</td>
-					<td>
-						<BigCheckbox checked={game.completed} disabled />
-					</td>
-					<td>
-						<BigCheckbox
+				<TableRow key={game.name}>
+					<TableCell>{game.name}</TableCell>
+					<TableCell>{game.players}</TableCell>
+					<TableCell padding="checkbox">
+						<Checkbox checked={game.played} disabled />
+					</TableCell>
+					<TableCell padding="checkbox">
+						<Checkbox checked={game.completed} disabled />
+					</TableCell>
+					<TableCell padding="checkbox">
+						<Checkbox
 							checked={Boolean(voteData.myVotes[game.name])}
 							onChange={onCheck(game.name)}
 							disabled={voteData.userReady || voteData.done}
 						/>
-					</td>
+					</TableCell>
 					{voteData.others.map((u) => (
-						<td key={u.name}>
-							<BigCheckbox checked={Boolean(voteData.votes[game.name]?.[u.name])} disabled />
-						</td>
+						<TableCell padding="checkbox" key={u.name}>
+							<Checkbox
+								checked={Boolean(voteData.votes[game.name]?.[u.name])}
+								disabled
+							/>
+						</TableCell>
 					))}
-					{voteData.done && <td>{game.votes}</td>}
-				</tr>
+					{voteData.done && <TableCell>{game.votes}</TableCell>}
+				</TableRow>
 			))}
-		</tbody>
+		</TableBody>
 	);
 };
 
-export default TableBody;
+export default GamesTableBody;

@@ -1,9 +1,10 @@
 import useSWR from "swr";
-import { emptyVoteData, FullVotesData, MyVotes, VoteData } from "types/Vote";
-import userStore from "components/hooks/userStore";
-import post from "pages/post";
+import type { FullVotesData, MyVotes, VoteData } from "types/Vote";
+import { post } from "pages/requests";
 import debounce from "components/hooks/useVotesData/debounce";
 import { useCallback } from "react";
+import type { PlatformUser } from "types/next-auth";
+import { useSession } from "next-auth/react";
 
 const findMyVotes = (voteData: VoteData, userName: string): Record<string, boolean> => {
 	if (!voteData.votes) return {};
@@ -16,61 +17,50 @@ const findMyVotes = (voteData: VoteData, userName: string): Record<string, boole
 
 const sendMyVotes = (myVotes: MyVotes) =>
 	post("/api/vote/post", myVotes).catch((e) => {
-		console.error("Failed to send votes");
-		console.error(e);
+		console.error("Failed to send votes", e);
 	});
+
+const augmentData = (data: VoteData, user: PlatformUser) => ({
+	...data,
+	myVotes: findMyVotes(data, user.name),
+	userReady: Boolean(data.ready[user.name]),
+	others: data.users.filter((u) => u.name != user.name)
+});
 
 const debouncedSendMyVotes = debounce(sendMyVotes, 7000);
 
-// TODO: REWRITE THIS TO NOT USE SWR, EMULATE IT TRU ZUSTAND (maybe not, knowing about swr 2.0)
-// POST RETURNS NEW STATE, THAT CAN DELAY NEXT REFRESH
-
 const useVotesData = (): {
 	data: FullVotesData;
-	change: (optimisticData: (currentData?: VoteData) => VoteData) => void;
+	change: (optimisticData: FullVotesData) => void;
+	isLoading: boolean;
 } => {
-	const { user } = userStore();
+	const { data: session } = useSession();
+	const { data, mutate, isLoading } = useSWR<FullVotesData>("/api/vote/get");
 
-	const fetcher = useCallback(
-		(url: string): Promise<FullVotesData> =>
-			fetch(url)
-				.then((res: Response) => res.json())
-				.then((data: VoteData) => ({
-					...data,
-					myVotes: findMyVotes(data, user.name),
-					userReady: Boolean(data.ready[user.name]),
-					others: data.users.filter((u) => u.name != user.name)
-				})),
-		[user.name]
-	);
-
-	const { data, mutate } = useSWR<FullVotesData>("/api/vote/get", {
-		refreshInterval: 15000,
-		fallbackData: { ...emptyVoteData, myVotes: {}, others: [], userReady: false },
-		revalidateOnMount: false,
-		fetcher
-	});
-
+	// todo: useSWRmutation?
 	const change = useCallback(
-		(optimisticData: (currentData?: FullVotesData) => FullVotesData) =>
-			mutate(
+		(updatedData: FullVotesData) => {
+			debouncedSendMyVotes({
+				votes: updatedData.myVotes,
+				ready: updatedData.userReady
+			});
+
+			return mutate(
 				() => {
-					debouncedSendMyVotes({
-						votes: data.myVotes,
-						ready: data.userReady
-					});
-					return null;
+					return updatedData;
 				},
 				{
 					revalidate: false,
-					populateCache: false,
-					optimisticData
+					populateCache: true,
+					rollbackOnError: true,
+					optimisticData: () => updatedData
 				}
-			),
-		[data, mutate]
+			);
+		},
+		[mutate]
 	);
 
-	return { data, change };
+	return { data: data ? augmentData(data, session.user) : null, change, isLoading };
 };
 
 export default useVotesData;

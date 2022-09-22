@@ -2,67 +2,33 @@ import { FC } from "react";
 import NameColumnHeader from "components/table/NameColumnHeader";
 import ReadyFooter from "components/table/ReadyFooter";
 import useVotesData from "components/hooks/useVotesData/useVotesData";
-import styled from "components/styles/styled";
-import userStore from "components/hooks/userStore";
-import TableBody from "components/table/TableBody";
-
-const StyledTable = styled("table")`
-	border-collapse: collapse;
-
-	th,
-	td {
-		border: 1px solid #333;
-	}
-
-	th:first-of-type,
-	td:first-of-type {
-		border-left: none;
-	}
-
-	th:last-of-type,
-	td:last-of-type {
-		border-right: none;
-	}
-
-	td,
-	th {
-		padding: 4px 8px;
-	}
-
-	th {
-		font-weight: normal;
-		color: #aaa;
-		text-align: left;
-	}
-
-	tr:nth-of-type(2n) {
-		background-color: ${({ theme }) => theme.elevation[2]};
-	}
-`;
+import GamesTableBody from "components/table/GamesTableBody";
+import { useSession } from "next-auth/react";
+import { Table, TableCell, TableHead, TableRow } from "@mui/material";
 
 const GamesTable: FC = () => {
 	const { data: voteData } = useVotesData();
-	const { user } = userStore();
+	const { data: session } = useSession();
 
 	return (
-		<StyledTable>
-			<thead>
-				<tr>
-					<th>Name</th>
-					<th>Players</th>
-					<th>Played</th>
-					<th>Completed</th>
-					<NameColumnHeader user={user} />
+		<Table size="small">
+			<TableHead>
+				<TableRow>
+					<TableCell>Name</TableCell>
+					<TableCell>Players</TableCell>
+					<TableCell>Played</TableCell>
+					<TableCell>Completed</TableCell>
+					<NameColumnHeader user={session.user} />
 					{voteData.others.map((u) => (
 						<NameColumnHeader user={u} key={u.name} />
 					))}
-					{voteData.done && <th>Total votes</th>}
-				</tr>
-			</thead>
+					{voteData.done && <TableCell>Total votes</TableCell>}
+				</TableRow>
+			</TableHead>
 
-			<TableBody />
+			<GamesTableBody />
 			{!voteData.done && <ReadyFooter />}
-		</StyledTable>
+		</Table>
 	);
 };
 
