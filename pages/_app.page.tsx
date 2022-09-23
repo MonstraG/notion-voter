@@ -24,6 +24,9 @@ const MyApp = ({
 }: AppProps<SessionProviderProps>) => (
 	<CacheProvider value={cache}>
 		<Head>
+			<meta charSet="utf-8" />
+			<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+			<link rel="icon" href="/favicon.ico" />
 			<title>Notion game-voting app 3000</title>
 		</Head>
 		<ThemeProvider theme={theme}>
