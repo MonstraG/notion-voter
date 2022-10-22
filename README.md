@@ -8,11 +8,6 @@ https://vercel.com
 3. create discord app
 4. put this into it's redirect uri https://[vercel app name].vercel.app/api/auth/callback/discord
 
-
-#### deps info
-
-regenerator-runtime: https://github.com/swc-project/swc/discussions/1678#discussioncomment-722665
-
 todo: use `/next/future/image` for avatars
 
 

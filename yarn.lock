@@ -2551,8 +2551,7 @@ __metadata:
     react: 18.2.0
     react-dom: 18.2.0
     react-is: ^18.2.0
-    regenerator-runtime: ^0.13.10
-    swr: ^2.0.0-beta.7
+    swr: ^2.0.0-rc.0
     typescript: ^4.8.4
     zustand: ^4.1.2
   languageName: unknown
@@ -3001,13 +3000,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"regenerator-runtime@npm:^0.13.10":
-  version: 0.13.10
-  resolution: "regenerator-runtime@npm:0.13.10"
-  checksum: 09893f5a9e82932642d9a999716b6c626dc53ef2a01307c952ebbf8e011802360163a37c304c18a6c358548be5a72b448e37209954a18696f21e438c81cbb4b9
-  languageName: node
-  linkType: hard
-
 "regenerator-runtime@npm:^0.13.4":
   version: 0.13.9
   resolution: "regenerator-runtime@npm:0.13.9"
@@ -3327,14 +3319,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"swr@npm:^2.0.0-beta.7":
-  version: 2.0.0-beta.7
-  resolution: "swr@npm:2.0.0-beta.7"
+"swr@npm:^2.0.0-rc.0":
+  version: 2.0.0-rc.0
+  resolution: "swr@npm:2.0.0-rc.0"
   dependencies:
     use-sync-external-store: ^1.2.0
   peerDependencies:
     react: ^16.11.0 || ^17.0.0 || ^18.0.0
-  checksum: e9f073057b852932ea86d0ba586f14c7ccb23437ca326f14b23253477f9d9ad0be240e112c44225c9384171ebd2b0ea49df0da23a88181b8db30d8a9a2b0f24b
+  checksum: 61b3c01ddd70d588ec08fe49b4ab96b990e9abe40ece993e948cc86c025b63073cd208d8e3c1513398cbf2573fb8333cbd691a805feafe25b9f677d5371e2c77
   languageName: node
   linkType: hard
 
