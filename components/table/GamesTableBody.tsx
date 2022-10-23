@@ -26,8 +26,12 @@ const GamesTableBody: FC = () => {
 		change(updated);
 	};
 
-	const [sortedNotionGames, setSortedNotionGames] = useState<NotionResultRow[]>(tableData);
+	const [sortedNotionGames, setSortedNotionGames] = useState<NotionResultRow[]>(tableData ?? []);
 	useEffect(() => {
+		if (tableData == null) {
+			return;
+		}
+
 		if (voteData.done) {
 			const withCounts = tableData.map((r) => ({
 				...r,
