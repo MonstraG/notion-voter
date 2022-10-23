@@ -37,7 +37,6 @@ const useVotesData = (): {
 	const { data: session } = useSession();
 	const { data, mutate, isLoading } = useSWR<FullVotesData>("/api/vote/get");
 
-	// todo: useSWRmutation?
 	const change = useCallback(
 		(updatedData: FullVotesData) => {
 			debouncedSendMyVotes({
