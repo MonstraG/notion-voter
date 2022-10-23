@@ -8,9 +8,6 @@ https://vercel.com
 3. create discord app
 4. put this into it's redirect uri https://[vercel app name].vercel.app/api/auth/callback/discord
 
-todo: use `/next/future/image` for avatars
-
-
 various auth reference links:
 - https://github.com/nextauthjs/next-auth-example
 - https://next-auth.js.org/configuration/nextjs#middleware
