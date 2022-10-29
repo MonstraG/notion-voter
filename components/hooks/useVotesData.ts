@@ -54,7 +54,11 @@ const useVotesData = (): {
 		refreshInterval: 7000
 	});
 	useEffect(() => {
-		useVotesStore.setState(data);
+		useVotesStore.setState((prev) => ({
+			...data,
+			myVotes: prev.myVotes,
+			prev: data.userReady
+		}));
 	}, [data]);
 
 	const change = useCallback((updatedData: FullVotesData) => {
