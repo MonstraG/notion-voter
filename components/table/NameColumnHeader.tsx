@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import NextImage from "next/future/image";
+import NextImage from "next/image";
 import type { PlatformUser } from "types/next-auth";
 import { Avatar, Stack, TableCell, Typography } from "@mui/material";
 

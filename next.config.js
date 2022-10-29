@@ -1,6 +1,5 @@
 /** @type import('next').NextConfig */
 const nextConfig = {
-	swcMinify: true,
 	reactStrictMode: true,
 	optimizeFonts: false, // https://github.com/vercel/next.js/issues/24640#issuecomment-879296080
 	compiler: {
@@ -8,8 +7,6 @@ const nextConfig = {
 	},
 	pageExtensions: ["api.ts", "page.tsx"],
 	experimental: {
-		legacyBrowsers: false,
-		browsersListForSwc: true,
 		modularizeImports: {
 			"@mui/material": {
 				transform: "@mui/material/{{member}}"
