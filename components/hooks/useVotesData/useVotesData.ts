@@ -44,17 +44,12 @@ const useVotesData = (): {
 				ready: updatedData.userReady
 			});
 
-			return mutate(
-				() => {
-					return updatedData;
-				},
-				{
-					revalidate: false,
-					populateCache: true,
-					rollbackOnError: true,
-					optimisticData: () => updatedData
-				}
-			);
+			return mutate(updatedData, {
+				revalidate: false,
+				populateCache: true,
+				rollbackOnError: true,
+				optimisticData: updatedData
+			});
 		},
 		[mutate]
 	);
