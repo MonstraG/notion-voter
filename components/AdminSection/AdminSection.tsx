@@ -1,8 +1,8 @@
 import { type FC, useState } from "react";
-import Button from "components/CustomButton";
-import useVotesData from "components/hooks/useVotesData";
+import useVotesData from "components/hooks/useVotesData/useVotesData";
 import type { VoteData } from "types/Vote";
 import { Stack } from "@mui/material";
+import CustomButton from "components/CustomButton";
 
 type AdminButtonProps = {
 	label: string;
@@ -38,14 +38,14 @@ const AdminSection: FC = () => {
 	return (
 		<Stack spacing={2} pt={4} direction="row">
 			{Object.entries(actions).map(([key, props]) => (
-				<Button
+				<CustomButton
 					key={key}
 					loading={fetching === key}
 					disabled={props.disabled(voteData) || loading}
 					onClick={onClick(key)}
 				>
 					{props.label}
-				</Button>
+				</CustomButton>
 			))}
 		</Stack>
 	);

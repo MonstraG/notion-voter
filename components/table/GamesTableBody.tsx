@@ -1,6 +1,6 @@
-import { ChangeEvent, FC, useEffect, useState } from "react";
-import { NotionResultRow } from "types/Row";
-import useVotesData from "components/hooks/useVotesData";
+import { type ChangeEvent, type FC, useEffect, useState } from "react";
+import type { NotionResultRow } from "types/Row";
+import useVotesData from "components/hooks/useVotesData/useVotesData";
 import useTableData from "components/table/useTableData";
 import { Checkbox, TableBody, TableCell, TableRow } from "@mui/material";
 

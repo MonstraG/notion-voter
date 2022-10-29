@@ -1,4 +1,4 @@
-import { NotionRow } from "types/Row";
+import type { NotionRow } from "types/Row";
 import notion from "./notion";
 
 type DatabaseRow = UnArray<Awaited<TableRowsQueryResult>>;

@@ -1,5 +1,5 @@
 import type { ChangeEvent, FC } from "react";
-import useVotesData from "components/hooks/useVotesData";
+import useVotesData from "components/hooks/useVotesData/useVotesData";
 import { Checkbox, TableCell, TableFooter, TableRow } from "@mui/material";
 
 const ReadyFooter: FC = () => {
