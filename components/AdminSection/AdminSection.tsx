@@ -31,7 +31,7 @@ const AdminSection: FC = () => {
 
 	const onClick = (key: string) => () => {
 		setFetching(key);
-		fetch(`api/admin/${key}`).finally(() => setFetching(null));
+		fetch(`/api/admin/${key}`).finally(() => setFetching(null));
 	};
 
 	const loading = Boolean(fetching) || !voteData;
