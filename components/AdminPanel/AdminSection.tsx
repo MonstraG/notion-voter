@@ -26,13 +26,9 @@ const actions: Record<string, AdminButtonProps> = {
 	}
 };
 
-const AdminPanel: FC = () => {
+const AdminSection: FC = () => {
 	const { data: voteData } = useVotesData();
-	const isAdmin = useIsAdmin();
-
 	const [fetching, setFetching] = useState<keyof typeof actions | null>(null);
-
-	if (!isAdmin) return null;
 
 	const onClick = (key: string) => () => {
 		setFetching(key);
@@ -56,4 +52,4 @@ const AdminPanel: FC = () => {
 	);
 };
 
-export default AdminPanel;
+export default AdminSection;
