@@ -66,13 +66,22 @@ const useVotesData = (): {
 		}
 	}, [data]);
 
-	const change = useCallback((updatedData: FullVotesData) => {
-		void debouncedSendMyVotes({
-			votes: updatedData.myVotes,
-			ready: updatedData.userReady
-		});
-		useVotesStore.setState(updatedData);
-	}, []);
+	const change = useCallback(
+		(updatedData: FullVotesData) => {
+			const { user } = session;
+			const fullUpdatedData = {
+				...updatedData,
+				myVotes: findMyVotes(updatedData, user.name),
+				userReady: Boolean(updatedData.ready[user.name])
+			};
+			void debouncedSendMyVotes({
+				votes: fullUpdatedData.myVotes,
+				ready: fullUpdatedData.userReady
+			});
+			useVotesStore.setState(fullUpdatedData);
+		},
+		[session]
+	);
 
 	const store = useVotesStore();
 	return { data: store, change, isLoading };
