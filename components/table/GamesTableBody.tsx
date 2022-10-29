@@ -54,7 +54,7 @@ const GamesTableBody: FC = () => {
 	return (
 		<TableBody>
 			{sortedNotionGames.map((game) => (
-				<TableRow key={game.name}>
+				<TableRow key={game.name} hover>
 					<TableCell>{game.name}</TableCell>
 					<TableCell>{game.players}</TableCell>
 					<TableCell padding="checkbox">

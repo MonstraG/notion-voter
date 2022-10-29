@@ -1,15 +1,9 @@
 import { type FC, useState } from "react";
 import useIsAdmin from "components/AdminPanel/useIsAdmin";
-import styled from "components/styles/styled";
 import Button from "components/CustomButton";
 import useVotesData from "components/hooks/useVotesData/useVotesData";
 import type { VoteData } from "types/Vote";
-
-const Buttons = styled("div")`
-	display: flex;
-	column-gap: 16px;
-	padding-top: 32px;
-`;
+import { Stack } from "@mui/material";
 
 type AdminButtonProps = {
 	label: string;
@@ -47,7 +41,7 @@ const AdminPanel: FC = () => {
 
 	const loading = Boolean(fetching) || !voteData;
 	return (
-		<Buttons>
+		<Stack spacing={2} pt={4} direction="row">
 			{Object.entries(actions).map(([key, props]) => (
 				<Button
 					key={key}
@@ -58,7 +52,7 @@ const AdminPanel: FC = () => {
 					{props.label}
 				</Button>
 			))}
-		</Buttons>
+		</Stack>
 	);
 };
 

@@ -1,18 +1,11 @@
 import type { NextPage } from "next";
 import GamesTable from "components/table/GamesTable";
 import AdminPanel from "components/AdminPanel/AdminPanel";
-import styled from "components/styles/styled";
 import { useSession } from "next-auth/react";
 import useVotesData from "components/hooks/useVotesData/useVotesData";
 import useTableData from "components/table/useTableData";
 import type { FC } from "react";
-import { Backdrop, CircularProgress } from "@mui/material";
-
-const TableWrapper = styled("div")`
-	display: flex;
-	align-items: start;
-	flex-direction: column;
-`;
+import { Backdrop, CircularProgress, Stack } from "@mui/material";
 
 const VoterApp: FC = () => {
 	const { isLoading: isLoadingVotes } = useVotesData();
@@ -27,10 +20,10 @@ const VoterApp: FC = () => {
 	}
 
 	return (
-		<TableWrapper>
+		<Stack>
 			<GamesTable />
 			<AdminPanel />
-		</TableWrapper>
+		</Stack>
 	);
 };
 

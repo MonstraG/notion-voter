@@ -2,21 +2,14 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 import { SessionProvider, type SessionProviderProps } from "next-auth/react";
 import { CacheProvider } from "@emotion/react";
-import styled from "components/styles/styled";
 import { SWRConfig } from "swr";
 import createCache from "@emotion/cache";
 import { get } from "pages/requests";
 import { ThemeProvider } from "@mui/material/styles";
-import { CssBaseline } from "@mui/material";
+import { Container, CssBaseline } from "@mui/material";
 import { theme } from "components/styles/theme";
 
 const cache = createCache({ key: "css", prepend: true });
-
-const Main = styled("main")`
-	display: flex;
-	justify-content: center;
-	padding: 4rem 2rem 20vh;
-`;
 
 const MyApp = ({
 	Component,
@@ -33,9 +26,12 @@ const MyApp = ({
 			<CssBaseline />
 			<SessionProvider session={session}>
 				<SWRConfig value={{ fetcher: get }}>
-					<Main>
+					<Container
+						sx={{ pb: "20vh", pt: 8, display: "flex", justifyContent: "center" }}
+						component="main"
+					>
 						<Component {...pageProps} />
-					</Main>
+					</Container>
 				</SWRConfig>
 			</SessionProvider>
 		</ThemeProvider>
