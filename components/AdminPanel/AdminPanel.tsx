@@ -1,7 +1,7 @@
 import { type FC, useState } from "react";
 import useIsAdmin from "components/AdminPanel/useIsAdmin";
 import Button from "components/CustomButton";
-import useVotesData from "components/hooks/useVotesData/useVotesData";
+import useVotesData from "components/hooks/useVotesData";
 import type { VoteData } from "types/Vote";
 import { Stack } from "@mui/material";
 

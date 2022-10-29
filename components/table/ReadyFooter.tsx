@@ -1,5 +1,5 @@
 import type { ChangeEvent, FC } from "react";
-import useVotesData from "components/hooks/useVotesData/useVotesData";
+import useVotesData from "components/hooks/useVotesData";
 import { useSession } from "next-auth/react";
 import { Checkbox, TableCell, TableFooter, TableRow } from "@mui/material";
 
@@ -7,13 +7,11 @@ const ReadyFooter: FC = () => {
 	const { data: voteData, change } = useVotesData();
 	const { data: session } = useSession();
 
-	const onCheck = (e: ChangeEvent<HTMLInputElement>) => {
-		const updated = {
+	const onCheck = (e: ChangeEvent<HTMLInputElement>) =>
+		change({
 			...voteData,
-			ready: { ...voteData.ready, [session.user.name]: e.target.checked }
-		};
-		change(updated);
-	};
+			userReady: e.target.checked
+		});
 
 	return (
 		<TableFooter>

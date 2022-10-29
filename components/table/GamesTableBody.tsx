@@ -1,30 +1,23 @@
 import { ChangeEvent, FC, useEffect, useState } from "react";
 import { NotionResultRow } from "types/Row";
-import useVotesData from "components/hooks/useVotesData/useVotesData";
+import useVotesData from "components/hooks/useVotesData";
 import useTableData from "components/table/useTableData";
-import { useSession } from "next-auth/react";
 import { Checkbox, TableBody, TableCell, TableRow } from "@mui/material";
 
 const sum = (array: number[]): number => array.reduce((acc, next) => acc + next, 0);
 
 const GamesTableBody: FC = () => {
-	const { data: session } = useSession();
 	const { data: voteData, change } = useVotesData();
 	const { data: tableData } = useTableData();
 
-	const onCheck = (gameName: string) => (e: ChangeEvent<HTMLInputElement>) => {
-		const updated = {
+	const onCheck = (gameName: string) => (e: ChangeEvent<HTMLInputElement>) =>
+		change({
 			...voteData,
-			votes: {
-				...voteData.votes,
-				[gameName]: {
-					...(voteData.votes[gameName] || {}),
-					[session.user.name]: e.target.checked
-				}
+			myVotes: {
+				...voteData.myVotes,
+				[gameName]: e.target.checked
 			}
-		};
-		change(updated);
-	};
+		});
 
 	const [sortedNotionGames, setSortedNotionGames] = useState<NotionResultRow[]>(tableData ?? []);
 	useEffect(() => {
