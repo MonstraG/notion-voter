@@ -4,7 +4,6 @@ import { get, post } from "pages/requests";
 import { useCallback, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import create from "zustand";
-import debounce from "components/hooks/useVotesData/debounce";
 
 const useVotesStore = create<FullVotesData>(() => ({
 	votes: {},
@@ -29,8 +28,6 @@ const sendMyVotes = (myVotes: MyVotes) =>
 	post("/api/vote/post", myVotes).catch((e) => {
 		console.error("Failed to send votes", e);
 	});
-
-const debouncedSendMyVotes = debounce(sendMyVotes, 3000);
 
 const useVotesData = (): {
 	data: FullVotesData;
@@ -74,7 +71,7 @@ const useVotesData = (): {
 				myVotes: findMyVotes(updatedData, user.name),
 				userReady: Boolean(updatedData.ready[user.name])
 			};
-			void debouncedSendMyVotes({
+			void sendMyVotes({
 				votes: fullUpdatedData.myVotes,
 				ready: fullUpdatedData.userReady
 			});
