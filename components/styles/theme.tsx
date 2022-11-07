@@ -1,12 +1,14 @@
 import { createTheme, type ThemeOptions } from "@mui/material/styles";
+import { Inter } from "@next/font/google";
+
+const inter = Inter({ subsets: ["cyrillic", "latin", "latin-ext"], display: "swap" });
 
 const themeOptions: ThemeOptions = {
 	palette: {
 		mode: "dark"
 	},
 	typography: {
-		fontFamily:
-			"Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'"
+		fontFamily: `${inter.style.fontFamily}, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'`
 	}
 };
 

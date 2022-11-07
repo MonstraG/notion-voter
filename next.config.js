@@ -1,7 +1,6 @@
 /** @type import('next').NextConfig */
 const nextConfig = {
 	reactStrictMode: true,
-	optimizeFonts: false, // https://github.com/vercel/next.js/issues/24640#issuecomment-879296080
 	compiler: {
 		emotion: true
 	},
