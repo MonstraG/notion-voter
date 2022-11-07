@@ -4,7 +4,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 
 export const authOptions = {
 	providers: [
-		Boolean(process.env.VERCEL)
+		process.env.VERCEL
 			? DiscordProvider({
 					clientId: process.env.DISCORD_CLIENT_ID,
 					clientSecret: process.env.DISCORD_CLIENT_SECRET

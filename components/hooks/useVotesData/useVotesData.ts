@@ -19,7 +19,7 @@ const findMyVotes = (voteData: VoteData, userName: string): Record<string, boole
 	if (!voteData.votes) return {};
 
 	const myVoteEntries = Object.entries(voteData.votes)
-		.filter(([_, votes]) => votes[userName] != null)
+		.filter(([, votes]) => votes[userName] != null)
 		.map(([game, votes]) => [game, votes[userName]]);
 	return Object.fromEntries(myVoteEntries);
 };

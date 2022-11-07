@@ -3,7 +3,7 @@ import { unstable_getServerSession } from "next-auth";
 import type { NextApiRequest, NextApiResponse } from "next";
 import type { ThisUser } from "types/next-auth";
 
-const debugMode = !Boolean(process.env.VERCEL);
+const debugMode = !process.env.VERCEL;
 const fallbackUser = JSON.parse(process.env.FALLBACK_USER_INFO!);
 
 export const getServerUser = (req: NextApiRequest, res: NextApiResponse): Promise<ThisUser> => {

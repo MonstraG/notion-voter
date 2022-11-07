@@ -1,12 +1,12 @@
-const debounce = (func: Function, delay: number) => {
+const debounce = (func: (...args: unknown[]) => unknown, delay: number) => {
 	let timeout: ReturnType<typeof setTimeout>;
 	let debouncing = false; // was there even a call to debounce
-	return (...args: any[]) => {
+	return (...args: unknown[]) => {
 		debouncing = true;
 		clearTimeout(timeout);
 		timeout = setTimeout(() => {
 			if (debouncing) {
-				func.apply(null, args);
+				func(...args);
 			}
 			debouncing = false;
 		}, delay);
