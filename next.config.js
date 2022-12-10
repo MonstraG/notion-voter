@@ -22,7 +22,7 @@ const nextConfig = {
 		domains: ["cdn.discordapp.com"]
 	},
 	eslint: {
-		dirs: ["components", "pages", "types"]
+		dirs: ["."]
 	}
 };
 

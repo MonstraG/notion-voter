@@ -4,27 +4,27 @@ import notion from "./notion";
 type DatabaseRow = UnArray<Awaited<TableRowsQueryResult>>;
 
 const getCheckboxValue = (row: DatabaseRow, property: string): boolean => {
-	const prop = row![property];
+	const prop = row[property];
 	if (property == null) {
-		console.warn(`Did not find property ${property} in row ${row!.id}`);
+		console.warn(`Did not find property ${property} in row ${row.id}`);
 		return false;
 	}
 	return prop.type === "checkbox" && prop.checkbox;
 };
 
 const getRichTextPlainValue = (row: DatabaseRow, property: string): string => {
-	const prop = row![property];
+	const prop = row[property];
 	if (property == null) {
-		console.warn(`Did not find property ${property} in row ${row!.id}`);
+		console.warn(`Did not find property ${property} in row ${row.id}`);
 		return "";
 	}
 	return prop.type === "rich_text" ? prop.rich_text[0].plain_text : "";
 };
 
 const getTitle = (row: DatabaseRow, property: string): string => {
-	const prop = row![property];
+	const prop = row[property];
 	if (property == null) {
-		console.warn(`Did not find property ${property} in row ${row!.id}`);
+		console.warn(`Did not find property ${property} in row ${row.id}`);
 		return "";
 	}
 	return prop.type === "title" ? prop.title[0].plain_text : "";
