@@ -20,6 +20,9 @@ const nextConfig = {
 	},
 	images: {
 		domains: ["cdn.discordapp.com"]
+	},
+	eslint: {
+		dirs: ["components", "pages", "types"]
 	}
 };
 
