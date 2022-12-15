@@ -21,7 +21,7 @@
         // required to be true for SWC / babel
         "jsx": "preserve",
         "incremental": true,
-        "baseUrl": ".",
+        "baseUrl": "."
     },
     "include": [
         "next-env.d.ts",
