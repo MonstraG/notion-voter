@@ -7,17 +7,15 @@ const nextConfig = {
 		emotion: true
 	},
 	pageExtensions: ["api.ts", "page.tsx"],
-	experimental: {
-		modularizeImports: {
-			"@mui/material": {
-				transform: "@mui/material/{{member}}"
-			},
-			"@mui/lab": {
-				transform: "@mui/lab/{{member}}"
-			},
-			"@mui/base": {
-				transform: "@mui/base/{{member}}"
-			}
+	modularizeImports: {
+		"@mui/material": {
+			transform: "@mui/material/{{member}}"
+		},
+		"@mui/lab": {
+			transform: "@mui/lab/{{member}}"
+		},
+		"@mui/base": {
+			transform: "@mui/base/{{member}}"
 		}
 	},
 	images: {
